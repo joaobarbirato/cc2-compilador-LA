@@ -1,5 +1,19 @@
 grammar LA;
 
+fragment LETRA: [a-z|A-Z];
+fragment ALGARISMO: [0-9];
+
+WS:   (' ') -> skip;
+ENDL:  ([\n] | [\t]) -> skip;
+
+NUM_INT: (ALGARISMO)+;
+
+NUM_REAL: (ALGARISMO)+ | (ALGARISMO)+ '.' ((ALGARISMO)+)?;
+
+CADEIA: ([\\'] (~[\\'])* [\\']) | ('"' (~'"')* '"');
+
+IDENT: (LETRA)+;
+
 /* Programas são constituidos de declarações e um corpo do código */
 programa : declaracoes 'algoritmo' corpo 'fim_algoritmo';
 
@@ -67,7 +81,7 @@ op2 : '*' | '/' ;
 op3 : '%' ;
 
 parcela : (op_unario)? parcela_unario | parcela_nao_unario ;
-parcela_unario : ('^') identificador
+parcela_unario : ('^')? identificador
 			   | IDENT '(' expressao (',' expressao)* ')'
 			   | NUM_INT
 			   | NUM_REAL
