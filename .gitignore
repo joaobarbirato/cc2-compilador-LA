@@ -2,3 +2,4 @@ lib/
 *.jar
 .idea/
 *.iml
+gen/
