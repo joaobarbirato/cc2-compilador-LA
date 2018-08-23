@@ -17,11 +17,25 @@ import org.antlr.v4.runtime.RecognitionException;
 public class Compilador{
 
     public static void main(String[] args) throws IOException, RecognitionException {
-        SaidaParser out = new SaidaParser()/
+        SaidaParser out = new SaidaParser();
+        TabelaDeSimbolos.limpartabela();
         ANTLRInputStream input = new ANTLRInputStream(new FileInputStream(args[0])); //Essa linha garante que estamos pegando os casos de teste
+        LALexer lexer = new LALexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        LAParser parser = new LAParser(tokens);
+        parser.addErrorListener(new ErrorListener(out));
 
+        parser.programa();
 
+        if (!out.isModificado()) {
+            out.println("Fim da analise. Sem erros sintaticos.");
+            out.println("Tabela de simbolos:");
 
+            TabelaDeSimbolos.imprimirTabela(out);
+            System.err.print(out);
+        } else {
+            out.println("Fim da analise. Com erros sintaticos.");
+        }
 
     }
 

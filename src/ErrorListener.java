@@ -8,11 +8,11 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
-public class T1ErrorListener implements ANTLRErrorListener {
+public class ErrorListener implements ANTLRErrorListener {
 
     SaidaParser sp;
 
-    public T1ErrorListener(SaidaParser sp) {
+    public ErrorListener(SaidaParser sp) {
         this.sp = sp;
     }
 
