@@ -1,5 +1,9 @@
 grammar LA;
 
+@members {
+   public static String grupo="726546";
+}
+
 fragment LETRA: [a-z|A-Z];
 fragment ALGARISMO: [0-9];
 
