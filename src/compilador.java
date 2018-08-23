@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.RecognitionException;
 
 
 
-public class Compilador{
+public class compilador{
 
     public static void main(String[] args) throws IOException, RecognitionException {
         SaidaParser out = new SaidaParser();
