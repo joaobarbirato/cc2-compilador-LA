@@ -1,5 +1,7 @@
+CorretorTrabalho1/
 lib/
 *.jar
 .idea/
 *.iml
 gen/
+target/
