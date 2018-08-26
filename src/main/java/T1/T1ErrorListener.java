@@ -1,12 +1,11 @@
 package T1;
 
 import java.util.BitSet;
-import org.antlr.v4.runtime.ANTLRErrorListener;
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
+//TODO: Acertar a saída do terminal
 
 public class T1ErrorListener implements ANTLRErrorListener {
 
@@ -18,8 +17,9 @@ public class T1ErrorListener implements ANTLRErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> rcgnzr, Object o, int i, int i1, String string, RecognitionException re) {
+        Token t = (Token)o;
         if (!sp.isModificado()) {
-            sp.println("Erro: linha " + i + ":" + i1);
+            sp.println("Linha " + i + ": erro proximo a " + t.getText ());
         }
     }
 
