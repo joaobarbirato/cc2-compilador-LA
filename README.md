@@ -16,7 +16,6 @@ Primeiro trabalho da disciplina de Construção de Compiladores 2
 - Selecionar "Test rule";
 - Um display gráfico com árvore de derivação aparecerá
 
-
 ## 4. Geração de arquivo JAR
 * 4.1. Em **File > Project Structure > Artifacts** clicar em **`+` > JAR**  acima;
 * 4.2. Selecionar a classe [`Principal`](https://github.com/joaobarbirato/cc2-compilador-LA/blob/joao/src/main/java/T1/Principal.java);
