@@ -15,7 +15,7 @@ NUM_REAL: (ALGARISMO)+ | (ALGARISMO)+ '.' ((ALGARISMO)+)?;
 
 CADEIA: ([\\'] (~[\\'])* [\\']) | ('"' (~'"')* '"');
 
-IDENT: (LETRA)+;
+IDENT: (LETRA)+ (ALGARISMO)* (LETRA)*;
 
 COMENTARIO: '{' ~('}'|'\n'|'\r')* '}' -> skip;
 
