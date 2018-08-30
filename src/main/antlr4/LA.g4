@@ -1,10 +1,13 @@
 grammar LA;
 
+@members {
+}
+
 fragment LETRA: [a-z|A-Z];
 fragment ALGARISMO: [0-9];
 
 WS:   (' ') -> skip;
-ENDL:  ([\n] | [\t]) -> skip;
+ENDL:  ([\n] | [\t] | [\r]) -> skip;
 
 NUM_INT: (ALGARISMO)+;
 
@@ -13,6 +16,8 @@ NUM_REAL: (ALGARISMO)+ | (ALGARISMO)+ '.' ((ALGARISMO)+)?;
 CADEIA: ([\\'] (~[\\'])* [\\']) | ('"' (~'"')* '"');
 
 IDENT: (LETRA)+;
+
+COMENTARIO: '{' ~('}'|'\n'|'\r')* '}' -> skip;
 
 /* Programas são constituidos de declarações e um corpo do código */
 programa : declaracoes 'algoritmo' corpo 'fim_algoritmo';
