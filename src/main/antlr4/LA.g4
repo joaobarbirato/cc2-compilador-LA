@@ -1,9 +1,12 @@
 grammar LA;
 
-@members {
+@lexer::members {
+   void erroLexico(String mensagem) {
+      throw new ParseCancellationException(mensagem);
+   }
 }
 
-fragment LETRA: [a-z|A-Z];
+fragment LETRA: [a-zA-Z];
 fragment ALGARISMO: [0-9];
 
 WS:   (' ') -> skip;
@@ -11,13 +14,17 @@ ENDL:  ([\n] | [\t] | [\r]) -> skip;
 
 NUM_INT: (ALGARISMO)+;
 
-NUM_REAL: (ALGARISMO)+ | (ALGARISMO)+ '.' ((ALGARISMO)+)?;
+NUM_REAL: (ALGARISMO)+ '.' (ALGARISMO)+;
 
 CADEIA: ([\\'] (~[\\'])* [\\']) | ('"' (~'"')* '"');
 
-IDENT: (LETRA)+;
+IDENT: LETRA (ALGARISMO|LETRA)*;
 
 COMENTARIO: '{' ~('}'|'\n'|'\r')* '}' -> skip;
+
+COMENTARIO_NAO_FECHADO: '{' ~('}'|'\n'|'\r')* '\n' { { erroLexico("Linha "+getLine()+": comentario nao fechado"); }; };
+
+ERRO: . { erroLexico("Linha "+getLine()+": "+getText()+" - simbolo nao identificado"); };
 
 /* Programas são constituidos de declarações e um corpo do código */
 programa : declaracoes 'algoritmo' corpo 'fim_algoritmo';
@@ -51,12 +58,12 @@ declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (declaracao_local
 				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (declaracao_local)* (cmd)* 'fim_funcao' ;
 
 parametro : ('var')? identificador (',' identificador)* ':' tipo_estendido ;
-parametros : parametro (',' parametro) ;
+parametros : parametro (',' parametro)* ;
 corpo : (declaracao_local)* (cmd)* ;
 
 /* Comandos definem qualquer tipo de chamada do programa */
 
-cmd : cmdLeia | cmdEscreva | cmdSe | cmdCaso | cmdPara | cmdEnquanto | cmdFaca
+cmd : cmdLeia | cmdEscreva | cmdSe | cmdCaso | cmdPara | cmdEnquanto | cmdFaca |
 	  cmdAtribuicao | cmdChamada | cmdRetorne ;
 
 cmdLeia : 'leia' '(' ('^')? identificador (',' ('^')? identificador)* ')' ;
