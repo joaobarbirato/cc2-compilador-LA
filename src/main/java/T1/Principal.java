@@ -5,7 +5,9 @@ import LA.LAParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,7 +27,13 @@ public class Principal {
             T1ErrorListener tel = new T1ErrorListener ( sp );
             parser.addErrorListener ( tel );
 
-            parser.programa ();
+            try {
+                parser.programa ( );
+            } catch(ParseCancellationException pce) {
+                if(pce.getMessage() != null) {
+                    output.println(pce.getMessage ());
+                }
+            }
 
             output.print(sp.toString ());
             output.println("Fim da compilacao");
