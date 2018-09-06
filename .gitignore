@@ -1,7 +1,10 @@
 CorretorTrabalho1/
+CasosDeTesteT1/
 lib/
 *.jar
 .idea/
 *.iml
 gen/
 target/
+tmp/
+out/

@@ -9,6 +9,8 @@ grammar LA;
 fragment LETRA: [a-zA-Z];
 fragment ALGARISMO: [0-9];
 
+@lexer::members { void erroLexico(String msg) { throw new ParseCancellationException(msg); } }
+
 WS:   (' ') -> skip;
 ENDL:  ([\n] | [\t] | [\r]) -> skip;
 
@@ -108,3 +110,5 @@ fator_logico : ('nao')? parcela_logica ;
 parcela_logica : ( 'verdadeiro' | 'falso') | exp_relacional ;
 op_logico_1 : 'ou' ;
 op_logico_2 : 'e' ;
+
+ERROR: . { throw new ParseCancellationException("Linha "+getLine()+": "+getText()+" - simbolo nao identificado"); };
