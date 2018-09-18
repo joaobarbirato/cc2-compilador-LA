@@ -9,7 +9,6 @@ grammar LA;
 fragment LETRA: [a-zA-Z];
 fragment ALGARISMO: [0-9];
 
-@lexer::members { void erroLexico(String msg) { throw new ParseCancellationException(msg); } }
 
 WS:   (' ') -> skip;
 ENDL:  ([\n] | [\t] | [\r]) -> skip;
@@ -56,8 +55,9 @@ registro : 'registro' (variavel)* 'fim_registro' ;
 
 /* As declarações globais indicam funções ou procedimentos, onde estão explicitados seus
 parâmetros e comandos */
-declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (declaracao_local)* (cmd)* 'fim_procedimento'
-				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (declaracao_local)* (cmd)* 'fim_funcao' ;
+declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (declaracao_local)* (cmd)* 'fim_procedimento' # declaracao_global_procedimento
+				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (declaracao_local)* (cmd)* 'fim_funcao' # declaracao_global_funcao
+				  ;
 
 parametro : ('var')? identificador (',' identificador)* ':' tipo_estendido ;
 parametros : parametro (',' parametro)* ;

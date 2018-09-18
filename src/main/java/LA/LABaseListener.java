@@ -1,4 +1,4 @@
-// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
+// Generated from LA.g4 by ANTLR 4.7.1
 package LA;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -172,13 +172,25 @@ public class LABaseListener implements LAListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracao_global(LAParser.Declaracao_globalContext ctx) { }
+	@Override public void enterDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracao_global(LAParser.Declaracao_globalContext ctx) { }
+	@Override public void exitDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclaracao_global_funcao(LAParser.Declaracao_global_funcaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclaracao_global_funcao(LAParser.Declaracao_global_funcaoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
