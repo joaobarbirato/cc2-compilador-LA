@@ -38,6 +38,7 @@ public class Principal {
             }
 
             if(!sp.modificado) {
+                sp.reset();
                 T1Visitor semantico = new T1Visitor(sp);
                 semantico.visitPrograma(arvore);
             }

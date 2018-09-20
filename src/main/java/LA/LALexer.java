@@ -138,9 +138,6 @@ public class LALexer extends Lexer {
 		case 69:
 			ERRO_action((RuleContext)_localctx, actionIndex);
 			break;
-		case 70:
-			ERROR_action((RuleContext)_localctx, actionIndex);
-			break;
 		}
 	}
 	private void COMENTARIO_NAO_FECHADO_action(RuleContext _localctx, int actionIndex) {
@@ -154,13 +151,6 @@ public class LALexer extends Lexer {
 		switch (actionIndex) {
 		case 1:
 			 erroLexico("Linha "+getLine()+": "+getText()+" - simbolo nao identificado"); 
-			break;
-		}
-	}
-	private void ERROR_action(RuleContext _localctx, int actionIndex) {
-		switch (actionIndex) {
-		case 2:
-			 throw new ParseCancellationException("Linha "+getLine()+": "+getText()+" - simbolo nao identificado"); 
 			break;
 		}
 	}
