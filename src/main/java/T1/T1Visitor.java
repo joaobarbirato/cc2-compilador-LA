@@ -19,8 +19,13 @@ public class T1Visitor extends LABaseVisitor<Void> {
         pilhaDeEscopos = new Escopos(new TabelaDeSimbolos("global"));
 
         super.visitPrograma(ctx);
-        visitDeclaracoes(ctx.declaracoes());
-        visitCorpo(ctx.corpo());
+        if(ctx.declaracoes() != null){
+            visitDeclaracoes(ctx.declaracoes());
+        }
+        if(ctx.corpo() != null) {
+            visitCorpo(ctx.corpo());
+        }
+
         pilhaDeEscopos.desempilha();
 
         if(sp.isModificado()){
@@ -32,7 +37,9 @@ public class T1Visitor extends LABaseVisitor<Void> {
     @Override
     public Void visitDeclaracoes(LAParser.DeclaracoesContext ctx) {
         if(ctx.children != null){
-            visitDecl_local_global((LAParser.Decl_local_globalContext) ctx.decl_local_global());
+            for (LAParser.Decl_local_globalContext ct : ctx.decl_local_global()){
+                visitDecl_local_global(ct);
+            }
         }
         return null;
     }
@@ -52,7 +59,7 @@ public class T1Visitor extends LABaseVisitor<Void> {
     public Void visitDeclaracao_local(LAParser.Declaracao_localContext ctx) {
         TabelaDeSimbolos escopoAtual = pilhaDeEscopos.escopoAtual();
         if(ctx.getText().startsWith("declare")){
-            visitVariavel(ctx.variavel());
+            visitVariavel(ctx.variavel());  //todo
         }else if(ctx.getText().startsWith("constante")) {
             if (!escopoAtual.existeSimbolo(ctx.IDENT().toString())) {
                 visitTipo_basico(ctx.tipo_basico());
@@ -73,19 +80,14 @@ public class T1Visitor extends LABaseVisitor<Void> {
         return null;
     }
 
-
-
     @Override
-    public Void visitDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx) {
-        pilhaDeEscopos.empilhar(new TabelaDeSimbolos(ctx.IDENT().getText()));
-
-        ctx.IDENT().getSymbol().getLine();
-
-        super.visitDeclaracao_global_procedimento(ctx);
-
-        pilhaDeEscopos.desempilha();
-
+    public Void visitVariavel(LAParser.VariavelContext ctx) {
+        if(ctx.children != null) {
+            TabelaDeSimbolos escopoAtual = pilhaDeEscopos.escopoAtual();
+            visitTipo(ctx.tipo());
+            visitIdentificador(ctx.identificador());
+            visitTipo(ctx.tipo());
+        }
         return null;
     }
-
 }
