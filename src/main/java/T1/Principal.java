@@ -27,12 +27,20 @@ public class Principal {
             T1ErrorListener tel = new T1ErrorListener ( sp );
             parser.addErrorListener ( tel );
 
+            LAParser.ProgramaContext arvore = null;
+
             try {
-                parser.programa ( );
+                arvore = parser.programa ( );
             } catch(ParseCancellationException pce) {
                 if(pce.getMessage() != null) {
                     output.println(pce.getMessage ());
                 }
+            }
+
+            if(!sp.modificado) {
+                sp.reset();
+                T1Visitor semantico = new T1Visitor(sp);
+                semantico.visitPrograma(arvore);
             }
 
             output.print(sp.toString ());

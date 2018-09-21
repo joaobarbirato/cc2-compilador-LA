@@ -28,4 +28,9 @@ public class SaidaParser {
     public String toString() {
         return conteudo.toString();
     }
+
+    public void reset() {
+        conteudo.setLength(0);
+        modificado = false;
+    }
 }
