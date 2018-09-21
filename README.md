@@ -27,3 +27,10 @@ A esse ponto, um artefato para a classe `Principal` é criado.
 ```bash
 java -jar target/cc2-compilador-LA-1.0-SNAPSHOT.jar [<parametros>]
 ```
+
+## 5. Executar corretor
+ 
+```bash
+java -jar CorretorTrabalho1/CorretorTrabalho1.jar "java -jar ../cc2-compilador-LA/out/artifacts/cc2_compilador_LA_jar/cc2-compilador-LA.jar" /usr/bin/gcc ../cc2-compilador-LA/tmp/ ../cc2-compilador-LA/casosDeTesteT1/ "726546 726546 726546" [sintatico][semantico][gerador][tudo]
+```
+
