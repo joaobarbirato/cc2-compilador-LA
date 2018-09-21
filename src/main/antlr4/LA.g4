@@ -19,7 +19,7 @@ NUM_REAL: (ALGARISMO)+ '.' (ALGARISMO)+;
 
 CADEIA: ([\\'] (~[\\'])* [\\']) | ('"' (~'"')* '"');
 
-IDENT: LETRA (ALGARISMO|LETRA)*;
+IDENT: (LETRA|'_') (ALGARISMO|LETRA|'_')*;
 
 COMENTARIO: '{' ~('}'|'\n'|'\r')* '}' -> skip;
 
@@ -40,7 +40,8 @@ declaracao_local : 	'declare' variavel
 
 /* Variáveis são constituidas de identificadores */
 variavel : identificador (',' identificador)* ':' tipo ;
-identificador : IDENT ('.' IDENT)* dimensao ;
+identificador : IDENT outro_identificador dimensao ;
+outro_identificador : ('.' IDENT)*;
 dimensao : ('[' exp_aritimetica ']')* ;
 
 /* Cada variável (ou constante) possui seu tipo especificado */
@@ -55,8 +56,8 @@ registro : 'registro' (variavel)* 'fim_registro' ;
 
 /* As declarações globais indicam funções ou procedimentos, onde estão explicitados seus
 parâmetros e comandos */
-declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (declaracao_local)* (cmd)* 'fim_procedimento' # declaracao_global_procedimento
-				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (declaracao_local)* (cmd)* 'fim_funcao' # declaracao_global_funcao
+declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (declaracao_local)* (cmd)* 'fim_procedimento'
+				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (declaracao_local)* (cmd)* 'fim_funcao'
 				  ;
 
 parametro : ('var')? identificador (',' identificador)* ':' tipo_estendido ;

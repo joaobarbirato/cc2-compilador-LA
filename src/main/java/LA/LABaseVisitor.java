@@ -59,6 +59,13 @@ public class LABaseVisitor<T> extends AbstractParseTreeVisitor<T> implements LAV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitOutro_identificador(LAParser.Outro_identificadorContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitDimensao(LAParser.DimensaoContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
@@ -108,14 +115,7 @@ public class LABaseVisitor<T> extends AbstractParseTreeVisitor<T> implements LAV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitDeclaracao_global_funcao(LAParser.Declaracao_global_funcaoContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDeclaracao_global(LAParser.Declaracao_globalContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

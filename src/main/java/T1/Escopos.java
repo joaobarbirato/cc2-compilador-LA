@@ -28,7 +28,7 @@ public class Escopos {
         return pilhaDeEscopos;
     }
 
-    public void desempilha(){
+    public void desempilhar(){
         pilhaDeEscopos.pop();
     }
 
