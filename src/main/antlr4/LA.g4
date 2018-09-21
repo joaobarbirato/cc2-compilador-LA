@@ -39,9 +39,8 @@ declaracao_local : 	'declare' variavel
 				 |	'tipo' IDENT ':' tipo ;
 
 /* Variáveis são constituidas de identificadores */
-variavel : identificador (',' identificador)* ':' tipo ;
-identificador : IDENT outro_identificador dimensao ;
-outro_identificador : ('.' IDENT)*;
+variavel : identificador1=identificador (',' outrosIdentificadores+=identificador)* ':' tipo ;
+identificador : ident1=IDENT ('.' outrosIdent=IDENT)* dimensao ;
 dimensao : ('[' exp_aritimetica ']')* ;
 
 /* Cada variável (ou constante) possui seu tipo especificado */
@@ -56,12 +55,11 @@ registro : 'registro' (variavel)* 'fim_registro' ;
 
 /* As declarações globais indicam funções ou procedimentos, onde estão explicitados seus
 parâmetros e comandos */
-declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (declaracao_local)* (cmd)* 'fim_procedimento'
-				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (declaracao_local)* (cmd)* 'fim_funcao'
+declaracao_global : 'procedimento' IDENT '(' (parametros)? ')' (declaracao_local)* (cmd)* 'fim_procedimento' # declaracao_global_procedimento
+				  | 'funcao' IDENT '(' (parametros)? ')' ':' tipo_estendido (declaracao_local)* (listaComandos+=cmd)* 'fim_funcao' # declaracao_global_funcao
 				  ;
-
-parametro : ('var')? identificador (',' identificador)* ':' tipo_estendido ;
-parametros : parametro (',' parametro)* ;
+parametro : ('var')? identificador1=identificador (',' outrosIdentificadores+=identificador)* ':' tipo_estendido ;
+parametros : parametro1=parametro (',' outrosParametros+=parametro)* ;
 corpo : (declaracao_local)* (cmd)* ;
 
 /* Comandos definem qualquer tipo de chamada do programa */
