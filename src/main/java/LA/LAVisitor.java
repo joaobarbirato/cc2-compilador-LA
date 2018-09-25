@@ -89,11 +89,19 @@ public interface LAVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRegistro(LAParser.RegistroContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LAParser#declaracao_global}.
+	 * Visit a parse tree produced by the {@code declaracao_global_procedimento}
+	 * labeled alternative in {@link LAParser#declaracao_global}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracao_global(LAParser.Declaracao_globalContext ctx);
+	T visitDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declaracao_global_funcao}
+	 * labeled alternative in {@link LAParser#declaracao_global}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaracao_global_funcao(LAParser.Declaracao_global_funcaoContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LAParser#parametro}.
 	 * @param ctx the parse tree

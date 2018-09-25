@@ -189,4 +189,51 @@ public class GeradorDeCodigo extends LABaseVisitor {
 
         return null;
     }
+
+    @Override
+    public Object visitCmd ( LAParser.CmdContext ctx ) {
+        String tokenInicio = ctx.getStart ().toString ();
+        String buffer;
+        switch (tokenInicio){
+            case "leia":
+                buffer = visitCmdLeia ( ctx.cmdLeia () ).toString ();
+                break;
+            case "escreva":
+                buffer = visitCmdEscreva ( ctx.cmdEscreva () ).toString ();
+                break;
+            case "se":
+                buffer = visitCmdSe ( ctx.cmdSe () ).toString ();
+                break;
+            case "caso":
+                buffer = visitCmdLeia ( ctx.cmdLeia () ).toString ();
+                break;
+            case "para":
+                buffer = visitCmdPara ( ctx.cmdPara () ).toString ();
+                break;
+            case "enquanto":
+                buffer = visitCmdEnquanto ( ctx.cmdEnquanto () ).toString ();
+                break;
+            case "faca":
+                buffer = visitCmdFaca ( ctx.cmdFaca () ).toString ();
+                break;
+            default:
+                if ( ctx.toString ().contains ( "<-" ) ){ // Atribuição
+                    buffer = visitCmdAtribuicao ( ctx.cmdAtribuicao () ).toString ();
+                } else if ( ctx.toString ().contains ( "(" ) && ctx.toString ().contains ( ")" ) ) { // Chamada
+                    buffer = visitCmdChamada ( ctx.cmdChamada () ).toString ();
+                } else {
+                    buffer = "";
+                }
+                break;
+        }
+        return buffer;
+    }
+    @Override
+    public Object visitCmdLeia ( LAParser.CmdLeiaContext ctx ) {
+        String buffer = ctx.getText ();
+        buffer = buffer.replace("escreva", "scanf");
+
+        buffer += ";";
+        return null;
+    }
 }
