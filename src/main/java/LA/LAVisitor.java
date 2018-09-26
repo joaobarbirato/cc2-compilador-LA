@@ -1,4 +1,4 @@
-// Generated from LA.g4 by ANTLR 4.7.1
+// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
 package LA;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -46,12 +46,6 @@ public interface LAVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIdentificador(LAParser.IdentificadorContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link LAParser#outro_identificador}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOutro_identificador(LAParser.Outro_identificadorContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LAParser#dimensao}.
 	 * @param ctx the parse tree

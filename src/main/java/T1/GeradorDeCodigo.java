@@ -3,6 +3,7 @@ package T1;
 import LA.LABaseVisitor;
 import LA.LAParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /* GeradprDeCodigo.java
@@ -11,7 +12,36 @@ import java.util.List;
 public class GeradorDeCodigo extends LABaseVisitor {
     static final String BLANK = " "; // String para espaço em branco
     private String codigoC; // String para armazenar o código escreveCdo em C
-    
+    private Escopos pilhaDeEscopos;
+
+    private class Tupla{
+        private String tipo;
+        private String var;
+        public Tupla (String var, String tipo){
+            this.tipo = tipo;
+            this.var = var;
+        }
+        public String getVar() { return var; };
+        public String getTipo() { return tipo; };
+
+        public boolean setVar(String var) {
+            if(var != null){
+                this.var = var;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean setTipo(String tipo) {
+            if(tipo != null){
+                this.tipo = tipo;
+                return true;
+            }
+            return false;
+        }
+    }
+
+
     // Construtor
     public GeradorDeCodigo() {
         codigoC = "";
@@ -50,11 +80,36 @@ public class GeradorDeCodigo extends LABaseVisitor {
     * */
     @Override
     public Object visitPrograma ( LAParser.ProgramaContext ctx ) {
+        pilhaDeEscopos = new Escopos(new TabelaDeSimbolos("global"));
         escreveC (
                 "#include<stdio.h>\n" +
                 "#include<stdlib.h>"
         );
         super.visitPrograma ( ctx );
+        pilhaDeEscopos.desempilhar();
+        return null;
+    }
+
+    @Override
+    public Object visitCorpo ( LAParser.CorpoContext ctx ) {
+        StringBuffer bufferCmd = new StringBuffer (  );
+        if ( ctx.listaComandos != null )
+            for ( LAParser.CmdContext c : ctx.listaComandos )
+                bufferCmd.append ( BLANK + visitCmd ( c ).toString () + ";" );
+
+        StringBuffer bufferDL = new StringBuffer (  );
+        if ( ctx.listaComandos != null )
+            for ( LAParser.Declaracao_localContext dl : ctx.listaDL )
+                bufferDL.append ( BLANK + visitDeclaracao_local ( dl ).toString () + BLANK );
+
+        bufferCmd.append ( BLANK );
+        escreveC (
+                "int main () {" +
+                    bufferDL.toString () + BLANK + bufferCmd.toString () + BLANK
+                    + "return 0; " +
+                "}"
+        );
+        pilhaDeEscopos.desempilhar ();
         return null;
     }
 
@@ -62,10 +117,18 @@ public class GeradorDeCodigo extends LABaseVisitor {
     public Object visitVariavel ( LAParser.VariavelContext ctx ) {
         String tipo = tipoParaC ( ctx.tipo().toString () );
         StringBuffer buffer = new StringBuffer (  );
-        buffer.append ( tipo + visitIdentificador ( ctx.identificador1 ).toString () );
+        if ( ctx.identificador1 != null ) {
+            String id = visitIdentificador ( ctx.identificador1 ).toString ()
+            pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
+            buffer.append ( tipo + BLANK + id );
+        }
         if ( ctx.outrosIdentificadores != null )
-            for (LAParser.IdentificadorContext id : ctx.outrosIdentificadores)
-                buffer.append ( "," + visitIdentificador ( id ).toString () );
+            for (LAParser.IdentificadorContext idc : ctx.outrosIdentificadores){
+                String id = visitIdentificador ( idc ).toString ();
+                pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
+                buffer.append ( "," + BLANK + tipo + BLANK + id );
+            }
+
 
         return buffer.toString ();
     }
@@ -91,7 +154,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
     }
 
     @Override
-    public Object visitDecl_local_global ( LAParser.Decl_local_globalContext ctx ) {
+    public Object visitDecl_local_global ( LAParser.Decl_local_globalContext ctx ) {]
         visitDeclaracao_global_funcao ( (LAParser.Declaracao_global_funcaoContext) ctx.declaracao_global () );
         visitDeclaracao_global_procedimento ( (LAParser.Declaracao_global_procedimentoContext) ctx.declaracao_global () );
         visitDeclaracao_local ( ctx.declaracao_local () );
@@ -118,32 +181,34 @@ public class GeradorDeCodigo extends LABaseVisitor {
 
     @Override
     public Object visitDeclaracao_local ( LAParser.Declaracao_localContext ctx ) {
-        TabelaDeSimbolos local = new TabelaDeSimbolos ( "local" );
         String dlid = ctx.getStart ().getText();
+        String id, tipo;
+        String buffer ;
         switch (dlid) {
             case "declare":
-                escreveC( visitVariavel ( ctx.variavel ( ) ).toString () );
+                buffer = visitVariavel ( ctx.variavel ( ) ).toString ();
                 break;
             case "constante":
-                String tipoBasico = tipoParaC ( ctx.tipo_basico ().getText () );
+                tipo = tipoParaC ( ctx.tipo_basico ().getText () );
+                id = ctx.IDENT ().toString ();
                 String valorConstante = visitValor_constante ( ctx.valor_constante () ).toString ();
-                escreveC (
+                pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
+                buffer =
                         "const " +
-                        tipoBasico +
-                        BLANK + ctx.IDENT ().toString () +
-                        "=" + valorConstante + ";"
-                );
+                        tipo +
+                        BLANK + id +
+                        "=" + valorConstante + ";";
                 break;
             case "tipo":
-                escreveC(
-                        "typedef " +
-                        ctx.tipo().toString () + ";"
-                );
+                tipo = ctx.tipo().toString ();
+                id = ctx.IDENT ().toString ();
+                pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
+                buffer = "typedef " + BLANK + tipo + BLANK + id + ";";
                 break;
-            default:
-                break;
+            default: // Não vai chegar nesse caso antes de uma detecção sintática
+                return null;
         }
-        return null;
+        return buffer;
     }
 
     @Override
@@ -151,11 +216,10 @@ public class GeradorDeCodigo extends LABaseVisitor {
         StringBuffer buffer = new StringBuffer (  );
         if ( ctx.parametro1 != null ) buffer.append( visitParametro (ctx.parametro1) );
         if ( ctx.outrosParametros != null )
-            for ( LAParser.ParametroContext p : ctx.outrosParametros )
-                buffer.append(
-                        "," +
-                        visitParametro( p ).toString ()
-                );
+            for ( LAParser.ParametroContext p : ctx.outrosParametros ) {
+                System.out.println ();
+                buffer.append ( "," + visitParametro ( p ) );
+            }
 
         return buffer.toString ();
     }
@@ -163,30 +227,72 @@ public class GeradorDeCodigo extends LABaseVisitor {
     @Override
     public Object visitParametro ( LAParser.ParametroContext ctx ) {
         String tipo = tipoParaC ( ctx.tipo_estendido ().getText ().replace("^","") );
-        StringBuffer buffer = new StringBuffer (  );
-        if ( ctx.identificador1 != null ) buffer.append( tipo + BLANK + visitIdentificador ( ctx.identificador1 ) );
+        StringBuffer buffer = new StringBuffer ( );
+        if ( ctx.identificador1 != null ) {
+            String id = visitIdentificador ( ctx.identificador1 ).toString ();
+            pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
+            buffer.append( tipo + BLANK + id );
+        }
         if ( ctx.outrosIdentificadores != null )
-            for( LAParser.IdentificadorContext i : ctx.outrosIdentificadores )
-                buffer.append ( "," + tipo + BLANK + visitIdentificador ( i ) );
+            for( LAParser.IdentificadorContext i : ctx.outrosIdentificadores ){
+                String id = visitIdentificador ( i ).toString ();
+                buffer.append ( "," + BLANK + tipo + BLANK + id );
+            }
 
         return buffer.toString ();
     }
 
     @Override
     public Object visitDeclaracao_global_funcao ( LAParser.Declaracao_global_funcaoContext ctx ) {
+        pilhaDeEscopos.empilhar ( new TabelaDeSimbolos ( "funcao" ) );
         String nome = ctx.IDENT ().toString ();
+        String tipo = ctx.tipo_estendido ().getText ().replace("^","*");
+        pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( nome, tipo );
+
         StringBuffer bufferCmd = new StringBuffer (  );
         if ( ctx.listaComandos != null )
             for ( LAParser.CmdContext c : ctx.listaComandos )
-                bufferCmd.append ( BLANK + visitCmd ( c ).toString () );
+                bufferCmd.append ( BLANK + visitCmd ( c ).toString () + ";" );
+
+        StringBuffer bufferDL = new StringBuffer (  );
+        if ( ctx.listaComandos != null )
+            for ( LAParser.Declaracao_localContext dl : ctx.listaDL )
+                bufferDL.append ( BLANK + visitDeclaracao_local ( dl ).toString () + BLANK );
 
         bufferCmd.append ( BLANK );
         escreveC (
-                tipoParaC ( ctx.tipo_estendido ().getText ().replace("^","") )
+                tipoParaC ( tipo )
                 + BLANK + nome + "(" + visitParametros(ctx.parametros ()) + ")"
-                + "{ " + bufferCmd.toString () + " }"
+                + "{ " + bufferDL.toString () + BLANK + bufferCmd.toString () + " }"
         );
+        pilhaDeEscopos.desempilhar ();
+        return null;
+    }
 
+    @Override
+    public Object visitDeclaracao_global_procedimento ( LAParser.Declaracao_global_procedimentoContext ctx ) {
+        pilhaDeEscopos.empilhar ( new TabelaDeSimbolos ( "procedimento" ) );
+        String nome = ctx.IDENT ().toString ();
+        String tipo = "void";
+        pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( nome, tipo );
+
+        StringBuffer bufferCmd = new StringBuffer (  );
+        if ( ctx.listaComandos != null )
+            for ( LAParser.CmdContext c : ctx.listaComandos )
+                bufferCmd.append ( BLANK + visitCmd ( c ).toString () + ";" );
+
+        StringBuffer bufferDL = new StringBuffer (  );
+        if ( ctx.listaComandos != null )
+            for ( LAParser.Declaracao_localContext dl : ctx.listaDL )
+                bufferDL.append ( BLANK + visitDeclaracao_local ( dl ).toString () + BLANK );
+
+        bufferCmd.append ( BLANK );
+        escreveC (
+                tipoParaC ( tipo )
+                        + BLANK + nome + "(" + visitParametros(ctx.parametros ()) + ")"
+                        + "{ " + bufferDL.toString () + BLANK + bufferCmd.toString () + " }"
+        );
+        pilhaDeEscopos.desempilhar ();
         return null;
     }
 

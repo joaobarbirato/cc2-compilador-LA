@@ -968,6 +968,8 @@ public class LAParser extends Parser {
 		}
 	}
 	public static class Declaracao_global_funcaoContext extends Declaracao_globalContext {
+		public Declaracao_localContext declaracao_local;
+		public List<Declaracao_localContext> listaDL = new ArrayList<Declaracao_localContext>();
 		public CmdContext cmd;
 		public List<CmdContext> listaComandos = new ArrayList<CmdContext>();
 		public TerminalNode IDENT() { return getToken(LAParser.IDENT, 0); }
@@ -1005,6 +1007,10 @@ public class LAParser extends Parser {
 		}
 	}
 	public static class Declaracao_global_procedimentoContext extends Declaracao_globalContext {
+		public Declaracao_localContext declaracao_local;
+		public List<Declaracao_localContext> listaDL = new ArrayList<Declaracao_localContext>();
+		public CmdContext cmd;
+		public List<CmdContext> listaComandos = new ArrayList<CmdContext>();
 		public TerminalNode IDENT() { return getToken(LAParser.IDENT, 0); }
 		public ParametrosContext parametros() {
 			return getRuleContext(ParametrosContext.class,0);
@@ -1074,7 +1080,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(193);
-					declaracao_local();
+					((Declaracao_global_procedimentoContext)_localctx).declaracao_local = declaracao_local();
+					((Declaracao_global_procedimentoContext)_localctx).listaDL.add(((Declaracao_global_procedimentoContext)_localctx).declaracao_local);
 					}
 					}
 					setState(198);
@@ -1088,7 +1095,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(199);
-					cmd();
+					((Declaracao_global_procedimentoContext)_localctx).cmd = cmd();
+					((Declaracao_global_procedimentoContext)_localctx).listaComandos.add(((Declaracao_global_procedimentoContext)_localctx).cmd);
 					}
 					}
 					setState(204);
@@ -1132,7 +1140,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(215);
-					declaracao_local();
+					((Declaracao_global_funcaoContext)_localctx).declaracao_local = declaracao_local();
+					((Declaracao_global_funcaoContext)_localctx).listaDL.add(((Declaracao_global_funcaoContext)_localctx).declaracao_local);
 					}
 					}
 					setState(220);
@@ -1327,6 +1336,10 @@ public class LAParser extends Parser {
 	}
 
 	public static class CorpoContext extends ParserRuleContext {
+		public Declaracao_localContext declaracao_local;
+		public List<Declaracao_localContext> listaDL = new ArrayList<Declaracao_localContext>();
+		public CmdContext cmd;
+		public List<CmdContext> listaComandos = new ArrayList<CmdContext>();
 		public List<Declaracao_localContext> declaracao_local() {
 			return getRuleContexts(Declaracao_localContext.class);
 		}
@@ -1372,7 +1385,8 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(253);
-				declaracao_local();
+				((CorpoContext)_localctx).declaracao_local = declaracao_local();
+				((CorpoContext)_localctx).listaDL.add(((CorpoContext)_localctx).declaracao_local);
 				}
 				}
 				setState(258);
@@ -1386,7 +1400,8 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(259);
-				cmd();
+				((CorpoContext)_localctx).cmd = cmd();
+				((CorpoContext)_localctx).listaComandos.add(((CorpoContext)_localctx).cmd);
 				}
 				}
 				setState(264);

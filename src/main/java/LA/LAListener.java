@@ -1,4 +1,4 @@
-// Generated from LA.g4 by ANTLR 4.7.1
+// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
 package LA;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -67,16 +67,6 @@ public interface LAListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdentificador(LAParser.IdentificadorContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link LAParser#outro_identificador}.
-	 * @param ctx the parse tree
-	 */
-	void enterOutro_identificador(LAParser.Outro_identificadorContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link LAParser#outro_identificador}.
-	 * @param ctx the parse tree
-	 */
-	void exitOutro_identificador(LAParser.Outro_identificadorContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LAParser#dimensao}.
 	 * @param ctx the parse tree
