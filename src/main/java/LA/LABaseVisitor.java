@@ -1,4 +1,4 @@
-// Generated from LA.g4 by ANTLR 4.7.1
+// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
 package LA;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -304,14 +304,49 @@ public class LABaseVisitor<T> extends AbstractParseTreeVisitor<T> implements LAV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParcela_unario(LAParser.Parcela_unarioContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParcela_unario_id(LAParser.Parcela_unario_idContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParcela_nao_unario(LAParser.Parcela_nao_unarioContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParcela_unario_chamada(LAParser.Parcela_unario_chamadaContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParcela_unario_inteiro(LAParser.Parcela_unario_inteiroContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParcela_unario_real(LAParser.Parcela_unario_realContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParcela_unario_expr(LAParser.Parcela_unario_exprContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParcela_nao_unario_id(LAParser.Parcela_nao_unario_idContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParcela_nao_unario_cadeia(LAParser.Parcela_nao_unario_cadeiaContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

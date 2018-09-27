@@ -1,4 +1,4 @@
-// Generated from LA.g4 by ANTLR 4.7.1
+// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
 package LA;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -422,25 +422,89 @@ public interface LAListener extends ParseTreeListener {
 	 */
 	void exitParcela(LAParser.ParcelaContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LAParser#parcela_unario}.
+	 * Enter a parse tree produced by the {@code parcela_unario_id}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
 	 * @param ctx the parse tree
 	 */
-	void enterParcela_unario(LAParser.Parcela_unarioContext ctx);
+	void enterParcela_unario_id(LAParser.Parcela_unario_idContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LAParser#parcela_unario}.
+	 * Exit a parse tree produced by the {@code parcela_unario_id}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
 	 * @param ctx the parse tree
 	 */
-	void exitParcela_unario(LAParser.Parcela_unarioContext ctx);
+	void exitParcela_unario_id(LAParser.Parcela_unario_idContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LAParser#parcela_nao_unario}.
+	 * Enter a parse tree produced by the {@code parcela_unario_chamada}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
 	 * @param ctx the parse tree
 	 */
-	void enterParcela_nao_unario(LAParser.Parcela_nao_unarioContext ctx);
+	void enterParcela_unario_chamada(LAParser.Parcela_unario_chamadaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LAParser#parcela_nao_unario}.
+	 * Exit a parse tree produced by the {@code parcela_unario_chamada}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
 	 * @param ctx the parse tree
 	 */
-	void exitParcela_nao_unario(LAParser.Parcela_nao_unarioContext ctx);
+	void exitParcela_unario_chamada(LAParser.Parcela_unario_chamadaContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parcela_unario_inteiro}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
+	 * @param ctx the parse tree
+	 */
+	void enterParcela_unario_inteiro(LAParser.Parcela_unario_inteiroContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parcela_unario_inteiro}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
+	 * @param ctx the parse tree
+	 */
+	void exitParcela_unario_inteiro(LAParser.Parcela_unario_inteiroContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parcela_unario_real}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
+	 * @param ctx the parse tree
+	 */
+	void enterParcela_unario_real(LAParser.Parcela_unario_realContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parcela_unario_real}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
+	 * @param ctx the parse tree
+	 */
+	void exitParcela_unario_real(LAParser.Parcela_unario_realContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parcela_unario_expr}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
+	 * @param ctx the parse tree
+	 */
+	void enterParcela_unario_expr(LAParser.Parcela_unario_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parcela_unario_expr}
+	 * labeled alternative in {@link LAParser#parcela_unario}.
+	 * @param ctx the parse tree
+	 */
+	void exitParcela_unario_expr(LAParser.Parcela_unario_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parcela_nao_unario_id}
+	 * labeled alternative in {@link LAParser#parcela_nao_unario}.
+	 * @param ctx the parse tree
+	 */
+	void enterParcela_nao_unario_id(LAParser.Parcela_nao_unario_idContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parcela_nao_unario_id}
+	 * labeled alternative in {@link LAParser#parcela_nao_unario}.
+	 * @param ctx the parse tree
+	 */
+	void exitParcela_nao_unario_id(LAParser.Parcela_nao_unario_idContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parcela_nao_unario_cadeia}
+	 * labeled alternative in {@link LAParser#parcela_nao_unario}.
+	 * @param ctx the parse tree
+	 */
+	void enterParcela_nao_unario_cadeia(LAParser.Parcela_nao_unario_cadeiaContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parcela_nao_unario_cadeia}
+	 * labeled alternative in {@link LAParser#parcela_nao_unario}.
+	 * @param ctx the parse tree
+	 */
+	void exitParcela_nao_unario_cadeia(LAParser.Parcela_nao_unario_cadeiaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LAParser#exp_relacional}.
 	 * @param ctx the parse tree
