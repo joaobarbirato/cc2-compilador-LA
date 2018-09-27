@@ -1732,7 +1732,7 @@ public class LAParser extends Parser {
 	public static class CmdSeContext extends ParserRuleContext {
 		public CmdContext cmd;
 		public List<CmdContext> cmdEntao = new ArrayList<CmdContext>();
-		public CmdContext cmdSenao;
+		public List<CmdContext> cmdSenao = new ArrayList<CmdContext>();
 		public ExpressaoContext expressao() {
 			return getRuleContext(ExpressaoContext.class,0);
 		}
@@ -1803,7 +1803,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(317);
-					((CmdSeContext)_localctx).cmdSenao = cmd();
+					((CmdSeContext)_localctx).cmd = cmd();
+					((CmdSeContext)_localctx).cmdSenao.add(((CmdSeContext)_localctx).cmd);
 					}
 					}
 					setState(322);
@@ -2444,6 +2445,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class ConstantesContext extends ParserRuleContext {
+		public Numero_intervaloContext numero_intervalo1;
+		public Numero_intervaloContext numero_intervalo;
+		public List<Numero_intervaloContext> outrosNumero_intervalo = new ArrayList<Numero_intervaloContext>();
 		public List<Numero_intervaloContext> numero_intervalo() {
 			return getRuleContexts(Numero_intervaloContext.class);
 		}
@@ -2477,7 +2481,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(414);
-			numero_intervalo();
+			((ConstantesContext)_localctx).numero_intervalo1 = numero_intervalo();
 			setState(419);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2487,7 +2491,8 @@ public class LAParser extends Parser {
 				setState(415);
 				match(T__7);
 				setState(416);
-				numero_intervalo();
+				((ConstantesContext)_localctx).numero_intervalo = numero_intervalo();
+				((ConstantesContext)_localctx).outrosNumero_intervalo.add(((ConstantesContext)_localctx).numero_intervalo);
 				}
 				}
 				setState(421);
@@ -2508,6 +2513,8 @@ public class LAParser extends Parser {
 	}
 
 	public static class Numero_intervaloContext extends ParserRuleContext {
+		public Op_unarioContext op_unario1;
+		public Op_unarioContext op_unario2;
 		public List<TerminalNode> NUM_INT() { return getTokens(LAParser.NUM_INT); }
 		public TerminalNode NUM_INT(int i) {
 			return getToken(LAParser.NUM_INT, i);
@@ -2550,7 +2557,7 @@ public class LAParser extends Parser {
 			if (_la==T__45) {
 				{
 				setState(422);
-				op_unario();
+				((Numero_intervaloContext)_localctx).op_unario1 = op_unario();
 				}
 			}
 
@@ -2569,7 +2576,7 @@ public class LAParser extends Parser {
 				if (_la==T__45) {
 					{
 					setState(427);
-					op_unario();
+					((Numero_intervaloContext)_localctx).op_unario2 = op_unario();
 					}
 				}
 

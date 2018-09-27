@@ -370,30 +370,42 @@ public class GeradorDeCodigo extends LABaseVisitor {
 
         if ( ctx.cmdEntao != null ){
             bufferRetorno += "} else {\n";
-            for ( LAParser.CmdContext c : ctx.cmdEntao )
+            for ( LAParser.CmdContext c : ctx.cmdSenao )
                 bufferCmdSenao.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
             bufferRetorno += bufferCmdSenao;
         }
 
-        bufferRetorno += "\n}" + END_CMD_LINE; // fim_se
+        bufferRetorno += "}\n"; // fim_se
         return bufferRetorno;
     }
 
     @Override
     public Object visitCmdCaso ( LAParser.CmdCasoContext ctx ) {
         String bufferRetorno = "switch(\n" + visitExp_aritimetica ( ctx.exp_aritimetica () ) + ") {\n";
-
+        StringBuilder bufferCmd = new StringBuilder (  );
+        if ( ctx.cmd() != null ) {
+            bufferRetorno  += "default:\n";
+            for ( LAParser.CmdContext c : ctx.cmd() )
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+            bufferRetorno += bufferCmd;
+        }
+        bufferRetorno = "}\n";
+        return bufferRetorno;
     }
 
     @Override
     public Object visitSelecao ( LAParser.SelecaoContext ctx ) {
         StringBuilder buffer = new StringBuilder (  );
         if ( ctx.item_selecao () != null )
-            for (LAParser.Item_selecaoContext isc : ctx.item_selecao ()){
+            for (LAParser.Item_selecaoContext isc : ctx.item_selecao ())
                 buffer.append ( visitItem_selecao ( isc ) );
-            }
+        return buffer;
     }
 
+    @Override
+    public Object visitItem_selecao ( LAParser.Item_selecaoContext ctx ) {
+        return super.visitItem_selecao ( ctx );
+    }
 
     @Override
     public Object visitExpressao ( LAParser.ExpressaoContext ctx ) {
