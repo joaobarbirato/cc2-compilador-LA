@@ -100,7 +100,11 @@ public class LALexer extends Lexer {
 		return VOCABULARY;
 	}
 
-	   void erroLexico(String mensagem) {      throw new ParseCancellationException(mensagem);   }
+
+	   void erroLexico(String mensagem) {
+	      throw new ParseCancellationException(mensagem);
+	   }
+
 
 	public LALexer(CharStream input) {
 		super(input);
@@ -156,8 +160,7 @@ public class LALexer extends Lexer {
 	private void ERROR_action(RuleContext _localctx, int actionIndex) {
 		switch (actionIndex) {
 		case 2:
-			 throw new ParseCancellationException("Linha "+getLine()+": "+getText()+" - simbolo nao identificado"); 
-			break;
+			 throw new ParseCancellationException("Linha "+getLine()+": "+getText()+" - simbolo nao identificado");
 		}
 	}
 

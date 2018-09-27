@@ -85,25 +85,28 @@ numero_intervalo : (op_unario1=op_unario)? ni1=NUM_INT ('..' (op_unario2=op_unar
 
 /* Precedência de operadores */
 op_unario : '-' ;
-exp_aritimetica : termo (op1 termo)* ;
-termo : fator (op2 fator)* ;
-fator : parcela (op3 parcela)* ;
+exp_aritimetica : termo1=termo (ops+=op1 outrosTermos+=termo)* ;
+termo : fator1=fator (ops+=op2 outrosFatores+=fator)* ;
+fator : parcela1=parcela (ops+=op3 parcela)* ;
 op1 : '+' | '-' ;
 op2 : '*' | '/' ;
 op3 : '%' ;
 
 parcela : (op_unario)? parcela_unario | parcela_nao_unario ;
-parcela_unario : ('^')? identificador
-			   | IDENT '(' expressao (',' expressao)* ')'
-			   | NUM_INT
-			   | NUM_REAL
-			   | '(' expressao ')' ;
+parcela_unario : ('^')? identificador # parcela_unario_id
+			   | IDENT '(' expressao (',' expressao)* ')' # parcela_unario_chamada
+			   | NUM_INT # parcela_unario_inteiro
+			   | NUM_REAL # parcela_unario_real
+			   | '(' expressao ')' # parcela_unario_expr
+			   ;
 
-parcela_nao_unario : '&' identificador | CADEIA ;
-exp_relacional : exp_aritimetica (op_relacional exp_aritimetica)? ;
+parcela_nao_unario : '&' identificador # parcela_nao_unario_id
+                   | CADEIA # parcela_nao_unario_cadeia
+                   ;
+exp_relacional : exp_a1=exp_aritimetica (op_rs+=op_relacional outrosExp_a+=exp_aritimetica)? ;
 op_relacional : '=' | '<>' | '>=' | '<=' | '>' | '<' ;
-expressao : termo_logico (op_logico_1 termo_logico)* ;
-termo_logico : fator_logico (op_logico_2 fator_logico)* ;
+expressao : termo_l1=termo_logico (op_ls+=op_logico_1 outrosTermos+=termo_logico)* ;
+termo_logico : fator_l1=fator_logico (op_ls+=op_logico_2 outrosFatores+=fator_logico)* ;
 fator_logico : ('nao')? parcela_logica ;
 parcela_logica : ( 'verdadeiro' | 'falso') | exp_relacional ;
 op_logico_1 : 'ou' ;

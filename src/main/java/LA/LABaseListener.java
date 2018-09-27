@@ -508,25 +508,85 @@ public class LABaseListener implements LAListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParcela_unario(LAParser.Parcela_unarioContext ctx) { }
+	@Override public void enterParcela_unario_id(LAParser.Parcela_unario_idContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParcela_unario(LAParser.Parcela_unarioContext ctx) { }
+	@Override public void exitParcela_unario_id(LAParser.Parcela_unario_idContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParcela_nao_unario(LAParser.Parcela_nao_unarioContext ctx) { }
+	@Override public void enterParcela_unario_chamada(LAParser.Parcela_unario_chamadaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParcela_nao_unario(LAParser.Parcela_nao_unarioContext ctx) { }
+	@Override public void exitParcela_unario_chamada(LAParser.Parcela_unario_chamadaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParcela_unario_inteiro(LAParser.Parcela_unario_inteiroContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParcela_unario_inteiro(LAParser.Parcela_unario_inteiroContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParcela_unario_real(LAParser.Parcela_unario_realContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParcela_unario_real(LAParser.Parcela_unario_realContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParcela_unario_expr(LAParser.Parcela_unario_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParcela_unario_expr(LAParser.Parcela_unario_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParcela_nao_unario_id(LAParser.Parcela_nao_unario_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParcela_nao_unario_id(LAParser.Parcela_nao_unario_idContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParcela_nao_unario_cadeia(LAParser.Parcela_nao_unario_cadeiaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParcela_nao_unario_cadeia(LAParser.Parcela_nao_unario_cadeiaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

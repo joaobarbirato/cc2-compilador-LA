@@ -2,6 +2,7 @@ package T1;
 
 import LA.LABaseVisitor;
 import LA.LAParser;
+import org.antlr.v4.codegen.model.BaseVisitorFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,19 +13,21 @@ import java.util.List;
 public class GeradorDeCodigo extends LABaseVisitor {
     static final String BLANK = " "; // String para espaço em branco
     static final String END_CMD_LINE = ";\n"; // String para pular linhas
-    private String codigoC; // String para armazenar o código escreveCdo em C
+    SaidaParser sp;
+    private String bufferTipoExp; // Armazena tipo que a expressao retorna
     private Escopos pilhaDeEscopos;
 
     // Construtor
-    public GeradorDeCodigo() {
-        codigoC = "";
+    public GeradorDeCodigo(SaidaParser sp) {
+        this.sp = sp;
+        bufferTipoExp = "inteiro";
     }
     
     // Método para escrever no código resultante
-    private String escreveC (String codigo) {
-        this.codigoC += BLANK + codigo + BLANK;
-        return codigoC;
-    }
+//    private String sp.print (String codigo) {
+//        this.codigoC += BLANK + codigo + BLANK;
+//        return codigoC;
+//    }
 
     // Método para transformar os tipos de variável em tipos em C
     private String tipoParaC (String tipo) {
@@ -73,7 +76,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
     @Override
     public Object visitPrograma ( LAParser.ProgramaContext ctx ) {
         pilhaDeEscopos = new Escopos(new TabelaDeSimbolos("global"));
-        escreveC (
+        sp.print (
                 "#include<stdio.h>\n" +
                 "#include<stdlib.h>\n\n"
         );
@@ -95,7 +98,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
                 bufferDL.append ( BLANK + visitDeclaracao_local ( dl ).toString () + BLANK );
 
         bufferCmd.append ( BLANK );
-        escreveC (
+        sp.print (
                 "int main () {\n" +
                     bufferDL.toString () + BLANK + bufferCmd.toString () + BLANK
                     + "return 0" + END_CMD_LINE +
@@ -128,10 +131,23 @@ public class GeradorDeCodigo extends LABaseVisitor {
     public Object visitIdentificador ( LAParser.IdentificadorContext ctx ) {
         StringBuffer buffer = new StringBuffer (  );
         buffer.append( ctx.ident1.toString () );
-        if ( ctx.outrosIdent != null )
+        if ( ctx.outrosIdent != null ){
             buffer.append( "." + ctx.outrosIdent.getText () );
+            String dimensao = visitDimensao ( ctx.dimensao () ).toString ();
+            if( dimensao != null )
+                buffer.append( dimensao );
+        }
 
         return buffer.toString ();
+    }
+
+    @Override
+    public Object visitDimensao ( LAParser.DimensaoContext ctx ) {
+        StringBuilder bufferDimensao = new StringBuilder (  );
+        if ( ctx.exp_aritimetica () != null )
+            for ( LAParser.Exp_aritimeticaContext eac : ctx.exp_aritimetica () )
+                bufferDimensao.append( "[" ).append ( visitExp_aritimetica ( eac ) ).append ( "]" );
+        return bufferDimensao;
     }
 
     @Override
@@ -248,7 +264,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
                 bufferDL.append ( BLANK ).append ( visitDeclaracao_local ( dl ).toString ( ) ).append ( BLANK );
 
         bufferCmd.append ( BLANK );
-        escreveC (
+        sp.print (
                 tipoParaC ( tipo )
                 + BLANK + nome + "(" + visitParametros(ctx.parametros ()) + ")"
                 + "{ " + bufferDL.toString () + BLANK + bufferCmd.toString () + " }"
@@ -275,7 +291,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
                 bufferDL.append ( BLANK ).append ( visitDeclaracao_local ( dl ).toString ( ) ).append ( BLANK );
 
         bufferCmd.append ( BLANK );
-        escreveC (
+        sp.print (
                 tipoParaC ( tipo )
                         + BLANK + nome + "(" + visitParametros(ctx.parametros ()) + ")"
                         + "{ " + bufferDL.toString () + BLANK + bufferCmd.toString () + " }"
@@ -356,6 +372,41 @@ public class GeradorDeCodigo extends LABaseVisitor {
     }
 
     @Override
+    public Object visitCmdEscreva ( LAParser.CmdEscrevaContext ctx ) {
+        String bufferRetorno = "printf(";
+        // Se há cadeia de caracteres para printar:
+        StringBuilder bufferCadeia = new StringBuilder ( "\"" );
+        StringBuilder bufferVar = new StringBuilder ( );
+
+        for ( LAParser.ExpressaoContext expc: ctx.expressao() ){
+            String textoExp = visitExpressao ( expc ).toString ();
+            boolean ehCadeia = textoExp.startsWith ( "\"" );
+            if (ehCadeia){
+                bufferCadeia.append ( textoExp.replace ( "\"" , "" ) );
+            } else {
+                bufferVar.append ( ", " ).append ( textoExp );
+            }
+
+            switch (bufferTipoExp){
+                case "int":
+                    bufferCadeia.append ( "%d" );
+                    break;
+                case "real":
+                    bufferCadeia.append( "%f" );
+                    break;
+                case "literal":
+                    bufferCadeia.append( "%c" );
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        bufferRetorno += bufferCadeia + "\")" + bufferVar;
+        return bufferRetorno;
+    }
+
+    @Override
     public Object visitCmdSe ( LAParser.CmdSeContext ctx ) {
         String bufferRetorno = "if ( "; // se
         StringBuilder bufferCmdEntao = new StringBuilder (  );
@@ -365,13 +416,13 @@ public class GeradorDeCodigo extends LABaseVisitor {
 
         if ( ctx.cmdEntao != null )
             for ( LAParser.CmdContext c : ctx.cmdEntao )
-                bufferCmdEntao.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+                bufferCmdEntao.append ( BLANK ).append ( visitCmd ( c ).toString ( ) );
         bufferRetorno += bufferCmdEntao;
 
         if ( ctx.cmdEntao != null ){
             bufferRetorno += "} else {\n";
             for ( LAParser.CmdContext c : ctx.cmdSenao )
-                bufferCmdSenao.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+                bufferCmdSenao.append ( BLANK ).append ( visitCmd ( c ).toString ( ) );
             bufferRetorno += bufferCmdSenao;
         }
 
@@ -387,10 +438,10 @@ public class GeradorDeCodigo extends LABaseVisitor {
         if ( ctx.cmd() != null ) {
             bufferRetorno  += "default:\n";
             for ( LAParser.CmdContext c : ctx.cmd() )
-                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) );
             bufferRetorno += bufferCmd;
         }
-        bufferRetorno = "}\n";
+        bufferRetorno += "}\n";
         return bufferRetorno;
     }
 
@@ -409,7 +460,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
         StringBuilder bufferCmd = new StringBuilder (  );
         if ( ctx.cmd() != null )
             for (LAParser.CmdContext c : ctx.cmd ( ))
-                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) );
         bufferCmd.append( "break" ).append( END_CMD_LINE );
         return buffer;
     }
@@ -446,14 +497,75 @@ public class GeradorDeCodigo extends LABaseVisitor {
         StringBuilder bufferCmd = new StringBuilder (  );
         if ( ctx.cmd() != null )
             for (LAParser.CmdContext c : ctx.cmd ( ))
-                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) );
+        buffer += bufferCmd;
         buffer += "}\n";
         return buffer;
     }
 
     @Override
+    public Object visitCmdEnquanto ( LAParser.CmdEnquantoContext ctx ) {
+        String buffer = "while(" + visitExpressao ( ctx.expressao () ) + "){\n";
+        StringBuilder bufferCmd = new StringBuilder (  );
+        if ( ctx.cmd() != null )
+            for (LAParser.CmdContext c : ctx.cmd ( ))
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) );
+
+        buffer += bufferCmd;
+        buffer += "}\n";
+        return buffer;
+    }
+
+    @Override
+    public Object visitCmdFaca ( LAParser.CmdFacaContext ctx ) {
+        String buffer = "do {";
+        StringBuilder bufferCmd = new StringBuilder (  );
+        if ( ctx.cmd() != null )
+            for (LAParser.CmdContext c : ctx.cmd ( ))
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) );
+
+        buffer += bufferCmd;
+        buffer += "} while(" + visitExpressao ( ctx.expressao () ) + "){" + END_CMD_LINE;
+        return buffer;
+    }
+
+    @Override
+    public Object visitCmdAtribuicao ( LAParser.CmdAtribuicaoContext ctx ) {
+        return visitIdentificador ( ctx.identificador () ) + " = " + visitExpressao ( ctx.expressao () ) + END_CMD_LINE;
+    }
+
+    @Override
+    public Object visitCmdChamada ( LAParser.CmdChamadaContext ctx ) {
+        String buffer = ctx.IDENT ().toString () + "("+ visitExpressao ( ctx.exp1 );
+        StringBuilder bufferExp = new StringBuilder (  );
+        if ( ctx.outrasExp != null)
+            for( LAParser.ExpressaoContext ec : ctx.outrasExp )
+                bufferExp.append ( ", " ).append ( visitExpressao ( ec ) );
+        buffer += ")" + END_CMD_LINE;
+        return buffer;
+    }
+
+    @Override
+    public Object visitCmdRetorne ( LAParser.CmdRetorneContext ctx ) {
+        return "return " + visitExpressao ( ctx.expressao () );
+    }
+
+    @Override
     public Object visitExpressao ( LAParser.ExpressaoContext ctx ) {
-        String buffer = ctx.getText ();
+        String buffer = visitTermo_logico ( ctx.termo_l1 ).toString ();
+        StringBuilder bufferTermos = new StringBuilder (  );
+        if ( ctx.outrosTermos != null )
+            for ( LAParser.Termo_logicoContext tlc : ctx.outrosTermos ){
+                bufferTermos.append(" && ");        // Operador logico "e"
+                bufferTermos.append( visitTermo_logico (tlc) );
+            }
+        buffer += bufferTermos;
+        return buffer;
+    }
+
+    @Override
+    public Object visitTermo_logico ( LAParser.Termo_logicoContext ctx ) {
+        String buffer = ctx.fator_l1.toString ();
         buffer = buffer.replace ("=", "==");     // Operador de igualdade
         buffer = buffer.replace ("<>", "!=");    // Operador de diferença
         buffer = buffer.replace (">==", ">=");   // Operador maior igual
@@ -461,10 +573,54 @@ public class GeradorDeCodigo extends LABaseVisitor {
         buffer = buffer.replace ("nao", "not");  // Operador de negacao
         buffer = buffer.replace ("verdadeiro", "true");  // valor logico verdadeiro
         buffer = buffer.replace ("falso", "false");      // valor logico falso
-        buffer = buffer.replace ("ou", "||");    // Operador logico ou
-        buffer = buffer.replace ("e", "&&");     // Operador logico e
-        //TODO: replace(e) pode alterar nome de variável D: atente-se ao erro
+
+        StringBuilder bufferTermos = new StringBuilder (  );
+        if ( ctx.outrosFatores != null )
+            for ( LAParser.Fator_logicoContext flc : ctx.outrosFatores){
+                bufferTermos.append(" || ");        // Operador logico "ou"
+                String texto = flc.getText ();
+                texto = texto.replace ("=", "==");     // Operador de igualdade
+                texto = texto.replace ("<>", "!=");    // Operador de diferença
+                texto = texto.replace (">==", ">=");   // Operador maior igual
+                texto = texto.replace ("<==", "<=");   // Operador menor igual
+                texto = texto.replace ("nao", "not");  // Operador de negacao
+                texto = texto.replace ("verdadeiro", "true");  // valor logico verdadeiro
+                texto = texto.replace ("falso", "false");      // valor logico falso
+                bufferTermos.append( texto );
+                visitFator_logico ( flc );
+            }
+        buffer += bufferTermos;
         return buffer;
+    }
+
+    @Override
+    public Object visitParcela_unario_inteiro ( LAParser.Parcela_unario_inteiroContext ctx ) {
+        bufferTipoExp = "inteiro";
+        return null;
+    }
+
+    @Override
+    public Object visitParcela_unario_real ( LAParser.Parcela_unario_realContext ctx ) {
+        bufferTipoExp = "real;";
+        return null;
+    }
+
+    @Override
+    public Object visitParcela_nao_unario_cadeia ( LAParser.Parcela_nao_unario_cadeiaContext ctx ) {
+        bufferTipoExp = "cadeia";
+        return null;
+    }
+
+    @Override
+    public Object visitParcela_unario_id ( LAParser.Parcela_unario_idContext ctx ) {
+        String simbolo = visitIdentificador ( ctx.identificador () ).toString ();
+        if ( pilhaDeEscopos.escopoAtual ().getEntrada ( simbolo ) != null ) {
+            String tipo = pilhaDeEscopos.escopoAtual ().getEntrada ( simbolo ).getTipo ();
+            if ( !tipo.equals ( "void" ) ) {
+                bufferTipoExp = tipo;
+            }
+        }
+        return null;
     }
 
     @Override
