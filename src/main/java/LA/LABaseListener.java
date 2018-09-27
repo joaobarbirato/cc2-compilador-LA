@@ -88,18 +88,6 @@ public class LABaseListener implements LAListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOutro_identificador(LAParser.Outro_identificadorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOutro_identificador(LAParser.Outro_identificadorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterDimensao(LAParser.DimensaoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -184,13 +172,25 @@ public class LABaseListener implements LAListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracao_global(LAParser.Declaracao_globalContext ctx) { }
+	@Override public void enterDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracao_global(LAParser.Declaracao_globalContext ctx) { }
+	@Override public void exitDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclaracao_global_funcao(LAParser.Declaracao_global_funcaoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclaracao_global_funcao(LAParser.Declaracao_global_funcaoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

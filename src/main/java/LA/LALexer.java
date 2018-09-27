@@ -161,7 +161,7 @@ public class LALexer extends Lexer {
 		switch (actionIndex) {
 		case 2:
 			 throw new ParseCancellationException("Linha "+getLine()+": "+getText()+" - simbolo nao identificado");
-        }
+		}
 	}
 
 	public static final String _serializedATN =

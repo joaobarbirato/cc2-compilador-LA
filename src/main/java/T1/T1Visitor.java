@@ -8,9 +8,6 @@ import java.util.ArrayList;
 public class T1Visitor extends LABaseVisitor<Object> {
     private Escopos pilhaDeEscopos;
     private SaidaParser sp;
-    private int contadorParametros;
-
-    ArrayList<String> funcoes = new ArrayList<String>();
 
     public T1Visitor(SaidaParser sp) {
         this.sp = sp;
@@ -22,7 +19,8 @@ public class T1Visitor extends LABaseVisitor<Object> {
     @Override
     public Void visitPrograma(LAParser.ProgramaContext ctx) {
         pilhaDeEscopos = new Escopos(new TabelaDeSimbolos("global"));
-        super.visitPrograma(ctx);
+        super.visitDeclaracoes(ctx.declaracoes());
+        super.visitCorpo(ctx.corpo());
 
         pilhaDeEscopos.desempilhar();
 
@@ -32,33 +30,23 @@ public class T1Visitor extends LABaseVisitor<Object> {
         return null;
     }
 
-    @Override
-    public Void visitDecl_local_global(LAParser.Decl_local_globalContext ctx) {
-        if (ctx.declaracao_local() != null) {
-            super.visitDeclaracao_local(ctx.declaracao_local());
-        } else if (ctx.declaracao_global() != null) {
-            super.visitDeclaracao_global(ctx.declaracao_global());
-        }
-        return null;
-    }
 
     @Override
     public Void visitDeclaracao_local(LAParser.Declaracao_localContext ctx) {
-        TabelaDeSimbolos escopoAtual = pilhaDeEscopos.escopoAtual();
         if (ctx.getText().startsWith("declare")) {
             super.visitVariavel(ctx.variavel());
         } else if (ctx.getText().startsWith("constante")) {
-            if (!escopoAtual.existeSimbolo(ctx.IDENT().toString())) {
+            if (!pilhaDeEscopos.escopoAtual().existeSimbolo(ctx.IDENT().toString())) {
                 super.visitTipo_basico(ctx.tipo_basico());
-                escopoAtual.adicionarSimbolo(ctx.IDENT().toString(), ctx.tipo_basico().getText());
+                pilhaDeEscopos.escopoAtual().adicionarSimbolo(ctx.IDENT().toString(), ctx.tipo_basico().getText());
                 super.visitValor_constante(ctx.valor_constante());
             } else {
                 //erro, constante já declarada
                 sp.println("Linha " + ctx.getStart().getLine() + ": identificador " + ctx.IDENT().toString() + " ja declarado anteriormente");
             }
         } else if (ctx.getText().startsWith("tipo")) {
-            if (!escopoAtual.existeSimbolo(ctx.IDENT().toString())) {
-                escopoAtual.adicionarSimbolo(ctx.IDENT().getText(), "tipo");
+            if (!pilhaDeEscopos.escopoAtual().existeSimbolo(ctx.IDENT().toString())) {
+                pilhaDeEscopos.escopoAtual().adicionarSimbolo(ctx.IDENT().getText(), "tipo");
                 super.visitTipo(ctx.tipo());
             } else {
                 sp.println("Linha " + ctx.getStart().getLine() + ": identificador " + ctx.IDENT().toString() + " ja declarado anteriormente");
@@ -68,32 +56,66 @@ public class T1Visitor extends LABaseVisitor<Object> {
     }
 
     @Override
-    public Object visitVariavel(LAParser.VariavelContext ctx) {
-        return super.visitVariavel(ctx);
-    }
-
-    @Override
-    public Void visitIdentificador(LAParser.IdentificadorContext ctx) {
-        if (ctx.children != null) {
-            TabelaDeSimbolos escopoAtual = pilhaDeEscopos.escopoAtual();
-            super.visitDimensao(ctx.dimensao());
-            super.visitOutro_identificador(ctx.outro_identificador());
-            if (ctx.outro_identificador().getText().startsWith(".")) {
-                String[] outroIdentificador = ctx.getText().split("\\.");
-                if (!pilhaDeEscopos.existeSimbolo(outroIdentificador[1])) {
-                    sp.println("Linha " + ctx.getStart().getLine() + ": identificador " + ctx.IDENT().toString() + " nao declarado");
-                }else if(!escopoAtual.existeSimbolo(ctx.IDENT().toString())){
-                    sp.println("Linha " + ctx.getStart().getLine() + ": identificador " + ctx.IDENT().toString() + " nao declarado");
+    public Object visitDeclaracao_global_procedimento(LAParser.Declaracao_global_procedimentoContext ctx) {
+        if(!pilhaDeEscopos.escopoAtual().existeSimbolo(ctx.IDENT().getText())){
+            pilhaDeEscopos.escopoAtual().adicionarSimbolo(ctx.IDENT().getText(), "função");
+            pilhaDeEscopos.empilhar(new TabelaDeSimbolos("procedimento"));
+            if(ctx.parametros() != null) {
+                for (LAParser.ParametroContext parametroCtx : ctx.parametros().parametro()) {
+                    super.visitParametro(parametroCtx);
                 }
             }
+            if(ctx.declaracao_local() != null) {
+                for(LAParser.Declaracao_localContext declaracaoCtx: ctx.declaracao_local()) {
+                    super.visitDeclaracao_local(declaracaoCtx);
+                }
+            }
+            if(ctx.cmd() != null){
+                for(LAParser.CmdContext cmd: ctx.cmd()){
+                    super.visitCmd(cmd);
+                }
+            }
+            pilhaDeEscopos.desempilhar();
+        }else{
+            sp.println("Linha " + ctx.getStart().getLine() + ": identificador " + ctx.IDENT().getText() + " ja declarado anteriormente");
         }
         return null;
     }
 
     @Override
-    public Void visitOutro_identificador(LAParser.Outro_identificadorContext ctx) {
+    public Object visitDeclaracao_global_funcao(LAParser.Declaracao_global_funcaoContext ctx) {
+        if(!pilhaDeEscopos.escopoAtual().existeSimbolo(ctx.getText())) {
+            pilhaDeEscopos.escopoAtual().adicionarSimbolo(ctx.IDENT().getText(), "função");
+            pilhaDeEscopos.empilhar(new TabelaDeSimbolos("função"));
+            if(ctx.parametros() != null) {
+                for (LAParser.ParametroContext parametroCtx : ctx.parametros().parametro()) {
+                    super.visitParametro(parametroCtx);
+                }
+            }
+            if(ctx.declaracao_local() != null) {
+                for(LAParser.Declaracao_localContext declaracaoCtx: ctx.declaracao_local()) {
+                    super.visitDeclaracao_local(declaracaoCtx);
+                }
+            }
+            if(ctx.cmd() != null) {
+                for (LAParser.CmdContext cmd : ctx.cmd()) {
+                    super.visitCmd(cmd);
+                }
+            }
+            pilhaDeEscopos.desempilhar();
+        }else{
+            sp.println("Linha " + ctx.getStart().getLine() + ": identificador " + ctx.IDENT().getText() + " ja declarado anteriormente");
+        }
         return null;
     }
+
+    //TODO: variavel e parametro
+    @Override
+    public Object visitVariavel(LAParser.VariavelContext ctx) {
+        return super.visitVariavel(ctx);
+    }
+
+
 
     @Override
     public Void visitDimensao(LAParser.DimensaoContext ctx) {
@@ -155,57 +177,10 @@ public class T1Visitor extends LABaseVisitor<Object> {
     @Override
     public Object visitRegistro(LAParser.RegistroContext ctx) {
         if(ctx.children != null){
-            for(LAParser.VariavelContext ct : ctx.variavel()){
-                super.visitVariavel(ct);
+            for(LAParser.VariavelContext variavelCtx : ctx.variavel()){
+                super.visitVariavel(variavelCtx);
             }
         }
         return null;
     }
-
-    @Override
-    public Object visitDeclaracao_global(LAParser.Declaracao_globalContext ctx) {
-        if(ctx.getText().startsWith("procedimento")){
-            if(!pilhaDeEscopos.existeSimbolo(ctx.IDENT().toString())){
-                pilhaDeEscopos.escopoAtual().adicionarSimbolo(ctx.IDENT().getText(), "procedimento");
-            }
-
-            pilhaDeEscopos.empilhar(new TabelaDeSimbolos("procedimento "+ctx.IDENT().getText()));
-            super.visitParametros(ctx.parametros());
-            for(LAParser.Declaracao_localContext ct : ctx.declaracao_local()){
-                super.visitDeclaracao_local(ct);
-            }
-            for(LAParser.CmdContext ct : ctx.cmd()){
-                super.visitCmd(ct);
-            }
-            pilhaDeEscopos.desempilhar();
-        } else{
-            if(!pilhaDeEscopos.existeSimbolo(ctx.IDENT().toString())){
-                pilhaDeEscopos.escopoAtual().adicionarSimbolo(ctx.IDENT().getText(), "funcao");
-            }
-            pilhaDeEscopos.empilhar(new TabelaDeSimbolos("funcao " + ctx.IDENT().getText()));
-            contadorParametros = 0;
-            super.visitParametros(ctx.parametros());
-            funcoes.add(ctx.IDENT().getText() + "," + contadorParametros + "," + ctx.tipo_estendido().getText());
-            visitTipo_estendido(ctx.tipo_estendido());
-            for(LAParser.Declaracao_localContext ct: ctx.declaracao_local()){
-                super.visitDeclaracao_local(ct);
-            }
-            for(LAParser.CmdContext ct : ctx.cmd()){
-                super.visitCmd(ct);
-            }
-            pilhaDeEscopos.desempilhar();
-        }
-        return null;
-    }
-
-//    @Override
-//    public Object visitParametro(LAParser.ParametroContext ctx) {
-//        if(ctx.children != null){
-//            contadorParametros++;
-//            TabelaDeSimbolos escopoAtual = pilhaDeEscopos.escopoAtual();
-//            if(!escopoAtual.existeSimbolo()
-//        }
-//    }
-
-
 }
