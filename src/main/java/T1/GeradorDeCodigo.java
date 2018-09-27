@@ -11,36 +11,9 @@ import java.util.List;
 * */
 public class GeradorDeCodigo extends LABaseVisitor {
     static final String BLANK = " "; // String para espaço em branco
+    static final String END_CMD_LINE = ";\n"; // String para pular linhas
     private String codigoC; // String para armazenar o código escreveCdo em C
     private Escopos pilhaDeEscopos;
-
-    private class Tupla{
-        private String tipo;
-        private String var;
-        public Tupla (String var, String tipo){
-            this.tipo = tipo;
-            this.var = var;
-        }
-        public String getVar() { return var; };
-        public String getTipo() { return tipo; };
-
-        public boolean setVar(String var) {
-            if(var != null){
-                this.var = var;
-                return true;
-            }
-            return false;
-        }
-
-        public boolean setTipo(String tipo) {
-            if(tipo != null){
-                this.tipo = tipo;
-                return true;
-            }
-            return false;
-        }
-    }
-
 
     // Construtor
     public GeradorDeCodigo() {
@@ -73,6 +46,25 @@ public class GeradorDeCodigo extends LABaseVisitor {
         return novoTipo;
     }
 
+    private String tipoParaFlagC (String tipo) {
+        String flag;
+        switch (tipo){
+            case "literal":
+                flag = "%c";
+                break;
+            case "initeiro":
+            case "logico":
+                flag = "%d";
+                break;
+            case "real":
+                flag = "float";
+                break;
+            default:
+                flag = "";
+        }
+        return flag;
+    }
+
 
     /*
     * Sobrecarga de operadores do visitor
@@ -83,7 +75,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
         pilhaDeEscopos = new Escopos(new TabelaDeSimbolos("global"));
         escreveC (
                 "#include<stdio.h>\n" +
-                "#include<stdlib.h>"
+                "#include<stdlib.h>\n\n"
         );
         super.visitPrograma ( ctx );
         pilhaDeEscopos.desempilhar();
@@ -95,7 +87,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
         StringBuffer bufferCmd = new StringBuffer (  );
         if ( ctx.listaComandos != null )
             for ( LAParser.CmdContext c : ctx.listaComandos )
-                bufferCmd.append ( BLANK + visitCmd ( c ).toString () + ";" );
+                bufferCmd.append ( BLANK + visitCmd ( c ).toString () + END_CMD_LINE );
 
         StringBuffer bufferDL = new StringBuffer (  );
         if ( ctx.listaComandos != null )
@@ -104,10 +96,10 @@ public class GeradorDeCodigo extends LABaseVisitor {
 
         bufferCmd.append ( BLANK );
         escreveC (
-                "int main () {" +
+                "int main () {\n" +
                     bufferDL.toString () + BLANK + bufferCmd.toString () + BLANK
-                    + "return 0; " +
-                "}"
+                    + "return 0" + END_CMD_LINE +
+                "}\n"
         );
         pilhaDeEscopos.desempilhar ();
         return null;
@@ -118,7 +110,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
         String tipo = tipoParaC ( ctx.tipo().toString () );
         StringBuffer buffer = new StringBuffer (  );
         if ( ctx.identificador1 != null ) {
-            String id = visitIdentificador ( ctx.identificador1 ).toString ()
+            String id = visitIdentificador ( ctx.identificador1 ).toString ();
             pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
             buffer.append ( tipo + BLANK + id );
         }
@@ -128,7 +120,6 @@ public class GeradorDeCodigo extends LABaseVisitor {
                 pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
                 buffer.append ( "," + BLANK + tipo + BLANK + id );
             }
-
 
         return buffer.toString ();
     }
@@ -154,7 +145,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
     }
 
     @Override
-    public Object visitDecl_local_global ( LAParser.Decl_local_globalContext ctx ) {]
+    public Object visitDecl_local_global ( LAParser.Decl_local_globalContext ctx ) {
         visitDeclaracao_global_funcao ( (LAParser.Declaracao_global_funcaoContext) ctx.declaracao_global () );
         visitDeclaracao_global_procedimento ( (LAParser.Declaracao_global_procedimentoContext) ctx.declaracao_global () );
         visitDeclaracao_local ( ctx.declaracao_local () );
@@ -193,17 +184,13 @@ public class GeradorDeCodigo extends LABaseVisitor {
                 id = ctx.IDENT ().toString ();
                 String valorConstante = visitValor_constante ( ctx.valor_constante () ).toString ();
                 pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
-                buffer =
-                        "const " +
-                        tipo +
-                        BLANK + id +
-                        "=" + valorConstante + ";";
+                buffer = "const " + tipo + BLANK + id + " = " + valorConstante + END_CMD_LINE;
                 break;
             case "tipo":
                 tipo = ctx.tipo().toString ();
                 id = ctx.IDENT ().toString ();
                 pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
-                buffer = "typedef " + BLANK + tipo + BLANK + id + ";";
+                buffer = "typedef " + BLANK + tipo + BLANK + id + END_CMD_LINE;
                 break;
             default: // Não vai chegar nesse caso antes de uma detecção sintática
                 return null;
@@ -227,16 +214,17 @@ public class GeradorDeCodigo extends LABaseVisitor {
     @Override
     public Object visitParametro ( LAParser.ParametroContext ctx ) {
         String tipo = tipoParaC ( ctx.tipo_estendido ().getText ().replace("^","") );
-        StringBuffer buffer = new StringBuffer ( );
+        StringBuilder buffer = new StringBuilder ( );
         if ( ctx.identificador1 != null ) {
             String id = visitIdentificador ( ctx.identificador1 ).toString ();
             pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( id, tipo );
-            buffer.append( tipo + BLANK + id );
+            buffer.append ( tipo ).append ( BLANK ).append ( id );
         }
+
         if ( ctx.outrosIdentificadores != null )
             for( LAParser.IdentificadorContext i : ctx.outrosIdentificadores ){
                 String id = visitIdentificador ( i ).toString ();
-                buffer.append ( "," + BLANK + tipo + BLANK + id );
+                buffer.append ( "," + BLANK ).append ( tipo ).append ( BLANK ).append ( id );
             }
 
         return buffer.toString ();
@@ -249,15 +237,15 @@ public class GeradorDeCodigo extends LABaseVisitor {
         String tipo = ctx.tipo_estendido ().getText ().replace("^","*");
         pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( nome, tipo );
 
-        StringBuffer bufferCmd = new StringBuffer (  );
+        StringBuilder bufferCmd = new StringBuilder (  );
         if ( ctx.listaComandos != null )
             for ( LAParser.CmdContext c : ctx.listaComandos )
-                bufferCmd.append ( BLANK + visitCmd ( c ).toString () + ";" );
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
 
-        StringBuffer bufferDL = new StringBuffer (  );
+        StringBuilder bufferDL = new StringBuilder (  );
         if ( ctx.listaComandos != null )
             for ( LAParser.Declaracao_localContext dl : ctx.listaDL )
-                bufferDL.append ( BLANK + visitDeclaracao_local ( dl ).toString () + BLANK );
+                bufferDL.append ( BLANK ).append ( visitDeclaracao_local ( dl ).toString ( ) ).append ( BLANK );
 
         bufferCmd.append ( BLANK );
         escreveC (
@@ -276,15 +264,15 @@ public class GeradorDeCodigo extends LABaseVisitor {
         String tipo = "void";
         pilhaDeEscopos.escopoAtual ().adicionarSimbolo ( nome, tipo );
 
-        StringBuffer bufferCmd = new StringBuffer (  );
+        StringBuilder bufferCmd = new StringBuilder (  );
         if ( ctx.listaComandos != null )
             for ( LAParser.CmdContext c : ctx.listaComandos )
-                bufferCmd.append ( BLANK + visitCmd ( c ).toString () + ";" );
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
 
-        StringBuffer bufferDL = new StringBuffer (  );
+        StringBuilder bufferDL = new StringBuilder (  );
         if ( ctx.listaComandos != null )
             for ( LAParser.Declaracao_localContext dl : ctx.listaDL )
-                bufferDL.append ( BLANK + visitDeclaracao_local ( dl ).toString () + BLANK );
+                bufferDL.append ( BLANK ).append ( visitDeclaracao_local ( dl ).toString ( ) ).append ( BLANK );
 
         bufferCmd.append ( BLANK );
         escreveC (
@@ -334,12 +322,97 @@ public class GeradorDeCodigo extends LABaseVisitor {
         }
         return buffer;
     }
+
     @Override
     public Object visitCmdLeia ( LAParser.CmdLeiaContext ctx ) {
-        String buffer = ctx.getText ();
-        buffer = buffer.replace("escreva", "scanf");
+        String bufferRetorno = "scanf(\"";
+        StringBuilder bufferIdent = new StringBuilder ( ", &" );
+        StringBuilder bufferTipo = new StringBuilder ( );
 
-        buffer += ";";
-        return null;
+        String tipo;
+        if ( ctx.id1 != null) {
+            String nomeEntrada= ctx.id1.IDENT ().toString ();
+            EntradaTabelaDeSimbolos ets = pilhaDeEscopos.escopoAtual ().getEntrada ( nomeEntrada );
+            if (ets != null) {
+                bufferIdent.append ( nomeEntrada );
+                tipo = ets.getTipo ();
+                bufferTipo.append ( tipo );
+            }
+        }
+        if ( ctx.outrosIds != null )
+            for (LAParser.IdentificadorContext ic: ctx.outrosIds ){
+                String nomeEntrada= ic.IDENT ().toString ();
+                EntradaTabelaDeSimbolos ets = pilhaDeEscopos.escopoAtual ().getEntrada ( nomeEntrada );
+                if (ets != null) {
+                    bufferIdent.append ( ", &" ).append ( nomeEntrada );
+                    tipo = ets.getTipo ();
+                    bufferTipo.append ( BLANK ).append ( tipo );
+                }
+            }
+
+            bufferTipo.append ("\"") ;
+        bufferRetorno += bufferIdent + ")" + END_CMD_LINE;
+        return bufferRetorno;
+    }
+
+    @Override
+    public Object visitCmdSe ( LAParser.CmdSeContext ctx ) {
+        String bufferRetorno = "if ( "; // se
+        StringBuilder bufferCmdEntao = new StringBuilder (  );
+        StringBuilder bufferCmdSenao = new StringBuilder (  );
+
+        bufferRetorno += visitExpressao ( ctx.expressao () ) + " ) {\n";
+
+        if ( ctx.cmdEntao != null )
+            for ( LAParser.CmdContext c : ctx.cmdEntao )
+                bufferCmdEntao.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+        bufferRetorno += bufferCmdEntao;
+
+        if ( ctx.cmdEntao != null ){
+            bufferRetorno += "} else {\n";
+            for ( LAParser.CmdContext c : ctx.cmdEntao )
+                bufferCmdSenao.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+            bufferRetorno += bufferCmdSenao;
+        }
+
+        bufferRetorno += "\n}" + END_CMD_LINE; // fim_se
+        return bufferRetorno;
+    }
+
+    @Override
+    public Object visitCmdCaso ( LAParser.CmdCasoContext ctx ) {
+        String bufferRetorno = "switch(\n" + visitExp_aritimetica ( ctx.exp_aritimetica () ) + ") {\n";
+
+    }
+
+    @Override
+    public Object visitSelecao ( LAParser.SelecaoContext ctx ) {
+        StringBuilder buffer = new StringBuilder (  );
+        if ( ctx.item_selecao () != null )
+            for (LAParser.Item_selecaoContext isc : ctx.item_selecao ()){
+                buffer.append ( visitItem_selecao ( isc ) );
+            }
+    }
+
+
+    @Override
+    public Object visitExpressao ( LAParser.ExpressaoContext ctx ) {
+        String buffer = ctx.getText ();
+        buffer = buffer.replace ("=", "==");     // Operador de igualdade
+        buffer = buffer.replace ("<>", "!=");    // Operador de diferença
+        buffer = buffer.replace (">==", ">=");   // Operador maior igual
+        buffer = buffer.replace ("<==", "<=");   // Operador menor igual
+        buffer = buffer.replace ("nao", "not");  // Operador de negacao
+        buffer = buffer.replace ("verdadeiro", "true");  // valor logico verdadeiro
+        buffer = buffer.replace ("falso", "false");      // valor logico falso
+        buffer = buffer.replace ("ou", "||");    // Operador logico ou
+        buffer = buffer.replace ("e", "&&");     // Operador logico e
+        //TODO: replace(e) pode alterar nome de variável D: atente-se ao erro
+        return buffer;
+    }
+
+    @Override
+    public Object visitExp_aritimetica ( LAParser.Exp_aritimeticaContext ctx ) {
+        return ctx.getText ();
     }
 }

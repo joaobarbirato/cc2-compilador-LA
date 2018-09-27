@@ -1656,6 +1656,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdEscrevaContext extends ParserRuleContext {
+		public ExpressaoContext exp1;
+		public ExpressaoContext expressao;
+		public List<ExpressaoContext> outrasExp = new ArrayList<ExpressaoContext>();
 		public List<ExpressaoContext> expressao() {
 			return getRuleContexts(ExpressaoContext.class);
 		}
@@ -1693,7 +1696,7 @@ public class LAParser extends Parser {
 			setState(296);
 			match(T__21);
 			setState(297);
-			expressao();
+			((CmdEscrevaContext)_localctx).exp1 = expressao();
 			setState(302);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1703,7 +1706,8 @@ public class LAParser extends Parser {
 				setState(298);
 				match(T__7);
 				setState(299);
-				expressao();
+				((CmdEscrevaContext)_localctx).expressao = expressao();
+				((CmdEscrevaContext)_localctx).outrasExp.add(((CmdEscrevaContext)_localctx).expressao);
 				}
 				}
 				setState(304);
@@ -1726,6 +1730,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdSeContext extends ParserRuleContext {
+		public CmdContext cmd;
+		public List<CmdContext> cmdEntao = new ArrayList<CmdContext>();
+		public CmdContext cmdSenao;
 		public ExpressaoContext expressao() {
 			return getRuleContext(ExpressaoContext.class,0);
 		}
@@ -1774,7 +1781,8 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(310);
-				cmd();
+				((CmdSeContext)_localctx).cmd = cmd();
+				((CmdSeContext)_localctx).cmdEntao.add(((CmdSeContext)_localctx).cmd);
 				}
 				}
 				setState(315);
@@ -1795,7 +1803,7 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(317);
-					cmd();
+					((CmdSeContext)_localctx).cmdSenao = cmd();
 					}
 					}
 					setState(322);
