@@ -383,6 +383,7 @@ public class GeradorDeCodigo extends LABaseVisitor {
     public Object visitCmdCaso ( LAParser.CmdCasoContext ctx ) {
         String bufferRetorno = "switch(\n" + visitExp_aritimetica ( ctx.exp_aritimetica () ) + ") {\n";
         StringBuilder bufferCmd = new StringBuilder (  );
+        bufferRetorno += visitSelecao ( ctx.selecao () );
         if ( ctx.cmd() != null ) {
             bufferRetorno  += "default:\n";
             for ( LAParser.CmdContext c : ctx.cmd() )
@@ -404,7 +405,50 @@ public class GeradorDeCodigo extends LABaseVisitor {
 
     @Override
     public Object visitItem_selecao ( LAParser.Item_selecaoContext ctx ) {
-        return super.visitItem_selecao ( ctx );
+        String buffer = visitConstantes( ctx.constantes () ).toString ();
+        StringBuilder bufferCmd = new StringBuilder (  );
+        if ( ctx.cmd() != null )
+            for (LAParser.CmdContext c : ctx.cmd ( ))
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+        bufferCmd.append( "break" ).append( END_CMD_LINE );
+        return buffer;
+    }
+
+    @Override
+    public Object visitConstantes ( LAParser.ConstantesContext ctx ) {
+        String buffer = visitNumero_intervalo ( ctx.numero_intervalo1 ).toString ();
+        StringBuilder bufferNumInter = new StringBuilder (  );
+        if ( ctx.outrosNumero_intervalo != null )
+            for ( LAParser.Numero_intervaloContext nic : ctx.outrosNumero_intervalo )
+                bufferNumInter.append( "\n" ).append( visitNumero_intervalo ( nic ).toString () ).append ( ":\n" );
+        buffer += bufferNumInter;
+        return buffer;
+    }
+
+    @Override
+    public Object visitNumero_intervalo ( LAParser.Numero_intervaloContext ctx ) {
+        if (ctx.op_unario2 != null && ctx.ni2 != null) return "case " + ctx.op_unario1.getText () + ctx.ni1.toString ();
+        else {
+            String buffer = "";
+            int ni1 = Integer.parseInt ( ctx.ni1.toString () );
+            int ni2 = Integer.parseInt ( ctx.ni2.toString () );
+            for (int i=ni1 + 1; i<=ni2; i+=1)
+                buffer += ":\ncase " + ctx.op_unario2.getText () + String.valueOf ( i );
+
+            return buffer;
+        }
+    }
+
+    @Override
+    public Object visitCmdPara ( LAParser.CmdParaContext ctx ) {
+        String id = ctx.IDENT ().toString ();
+        String buffer = "for(" + id + "=" + visitExp_aritimetica ( ctx.exp_aritmetica1 ) + ";" + id + "<=" + visitExp_aritimetica ( ctx.exp_aritmetica2 ) + "{\n";
+        StringBuilder bufferCmd = new StringBuilder (  );
+        if ( ctx.cmd() != null )
+            for (LAParser.CmdContext c : ctx.cmd ( ))
+                bufferCmd.append ( BLANK ).append ( visitCmd ( c ).toString ( ) ).append ( END_CMD_LINE );
+        buffer += "}\n";
+        return buffer;
     }
 
     @Override

@@ -70,18 +70,18 @@ cmdLeia : 'leia' '(' ('^')? id1=identificador (',' ('^')? outrosIds+=identificad
 cmdEscreva : 'escreva' '(' exp1=expressao (',' outrasExp+=expressao)* ')' ;
 cmdSe : 'se' expressao 'entao' (cmdEntao+=cmd)* ('senao' (cmdSenao+=cmd)*)? 'fim_se' ;
 cmdCaso : 'caso' exp_aritimetica 'seja' selecao ('senao' (cmd)*)? 'fim_caso' ;
-cmdPara : 'para' IDENT '<-'exp_aritimetica 'ate' exp_aritimetica 'faca' (cmd)* 'fim_para' ;
+cmdPara : 'para' IDENT '<-'exp_aritmetica1=exp_aritimetica 'ate' exp_aritmetica2=exp_aritimetica 'faca' (cmd)* 'fim_para' ;
 cmdEnquanto :  'enquanto' expressao 'faca' (cmd)* 'fim_enquanto' ;
 cmdFaca : 'faca' (cmd)* 'ate' expressao ;
 cmdAtribuicao : ('^')? identificador '<-' expressao ;
-cmdChamada : IDENT '(' expressao (',' expressao)* ')' ;
+cmdChamada : IDENT '(' exp1=expressao (',' outrasExp+=expressao)* ')' ;
 cmdRetorne : 'retorne' expressao ;
 
 /* Regras utilizadas para o cmdCaso */
 selecao : (item_selecao)* ;
 item_selecao : constantes ':' (cmd)* ;
 constantes : numero_intervalo1=numero_intervalo (',' outrosNumero_intervalo+=numero_intervalo)* ;
-numero_intervalo : (op_unario1=op_unario)? NUM_INT ('..' (op_unario2=op_unario)? NUM_INT)? ;
+numero_intervalo : (op_unario1=op_unario)? ni1=NUM_INT ('..' (op_unario2=op_unario)? ni2=NUM_INT)? ;
 
 /* Precedência de operadores */
 op_unario : '-' ;
