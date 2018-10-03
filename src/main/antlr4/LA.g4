@@ -18,7 +18,7 @@ NUM_REAL: (ALGARISMO)+ '.' (ALGARISMO)+;
 
 CADEIA: ([\\'] (~[\\'])* [\\']) | ('"' (~'"')* '"');
 
-IDENT: LETRA (ALGARISMO|LETRA)*;
+IDENT: (LETRA|'_') ('_'|ALGARISMO|LETRA)*;
 
 COMENTARIO: '{' ~('}'|'\n'|'\r')* '}' -> skip;
 
@@ -39,7 +39,7 @@ declaracao_local : 	'declare' variavel
 
 /* Variáveis são constituidas de identificadores */
 variavel : identificador1=identificador (',' outrosIdentificadores+=identificador)* ':' tipo ;
-identificador : ident1=IDENT ('.' outrosIdent=IDENT)* dimensao ;
+identificador : ident1=IDENT ('.' outrosIdent+=IDENT)* dimensao ;
 dimensao : ('[' exp_aritimetica ']')* ;
 
 /* Cada variável (ou constante) possui seu tipo especificado */
@@ -81,7 +81,7 @@ cmdRetorne : 'retorne' expressao ;
 selecao : (item_selecao)* ;
 item_selecao : constantes ':' (cmd)* ;
 constantes : numero_intervalo1=numero_intervalo (',' outrosNumero_intervalo+=numero_intervalo)* ;
-numero_intervalo : (op_unario1=op_unario)? ni1=NUM_INT ('..' (op_unario2=op_unario)? ni2=NUM_INT)? ;
+numero_intervalo : (op_unario1=op_unario)? ni1=NUM_INT ('..' (op_unario2+=op_unario)? ni2=NUM_INT)? ;
 
 /* Precedência de operadores */
 op_unario : '-' ;

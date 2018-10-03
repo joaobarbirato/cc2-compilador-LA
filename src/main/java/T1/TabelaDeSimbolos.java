@@ -20,6 +20,13 @@ public class TabelaDeSimbolos {
         this.escopo = escopo;
     }
 
+    public void printEntradas () {
+        for(EntradaTabelaDeSimbolos e : simbolos) {
+            System.out.println ( e.getNome ( ) );
+            System.out.println ( e.getTipo ( ) );
+        }
+    }
+
     public void adicionarSimbolo(String nome, String tipo) {
         simbolos.add(new EntradaTabelaDeSimbolos(nome,tipo));
     }
@@ -28,6 +35,17 @@ public class TabelaDeSimbolos {
         for(String s:nomes) {
             simbolos.add(new EntradaTabelaDeSimbolos(s, tipo));
         }
+    }
+
+    public List<EntradaTabelaDeSimbolos> getSimbolos(){
+        return simbolos;
+    }
+
+    public boolean existeStructId(String id){
+        for ( EntradaTabelaDeSimbolos etds : simbolos )
+            if ( etds.getNome ().equals ( id ) && etds.getTipo ().equals ( "struct" ) )
+                return true;
+        return false;
     }
 
     public boolean existeSimbolo(String nome) {
@@ -41,7 +59,7 @@ public class TabelaDeSimbolos {
 
     public EntradaTabelaDeSimbolos getEntrada(String nome){
         for(EntradaTabelaDeSimbolos ets:simbolos){
-            if(ets.getNome () == nome)
+            if( ets.getNome ( ).equals ( nome ) )
                 return ets;
         }
         return null;

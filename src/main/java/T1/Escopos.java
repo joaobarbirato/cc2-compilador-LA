@@ -7,12 +7,12 @@ public class Escopos {
     private LinkedList<TabelaDeSimbolos> pilhaDeEscopos;
 
     public Escopos() {
-        pilhaDeEscopos = new LinkedList<TabelaDeSimbolos>();
+        pilhaDeEscopos = new LinkedList <> ( );
         pilhaDeEscopos.push(new TabelaDeSimbolos("Principal"));
     }
 
     public Escopos(TabelaDeSimbolos Tabela) {
-        pilhaDeEscopos = new LinkedList<TabelaDeSimbolos>();
+        pilhaDeEscopos = new LinkedList <> ( );
         pilhaDeEscopos.push(Tabela);
     }
 
@@ -40,4 +40,12 @@ public class Escopos {
         }
         return false;
     }
+
+    public void adicionaSimboloTopo (EntradaTabelaDeSimbolos ets){
+        this.escopoAtual ().adicionarSimbolo ( ets.getNome (), ets.getTipo () );
+    };
+
+    public void adicionaSimboloTopo (String nome, String tipo){
+        this.escopoAtual ().adicionarSimbolo ( nome, tipo );
+    };
 }

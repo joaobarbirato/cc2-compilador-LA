@@ -473,7 +473,8 @@ public class LAParser extends Parser {
 
 	public static class IdentificadorContext extends ParserRuleContext {
 		public Token ident1;
-		public Token outrosIdent;
+		public Token IDENT;
+		public List<Token> outrosIdent = new ArrayList<Token>();
 		public DimensaoContext dimensao() {
 			return getRuleContext(DimensaoContext.class,0);
 		}
@@ -518,7 +519,8 @@ public class LAParser extends Parser {
 				setState(142);
 				match(T__8);
 				setState(143);
-				((IdentificadorContext)_localctx).outrosIdent = match(IDENT);
+				((IdentificadorContext)_localctx).IDENT = match(IDENT);
+				((IdentificadorContext)_localctx).outrosIdent.add(((IdentificadorContext)_localctx).IDENT);
 				}
 				}
 				setState(148);
@@ -2521,7 +2523,8 @@ public class LAParser extends Parser {
 	public static class Numero_intervaloContext extends ParserRuleContext {
 		public Op_unarioContext op_unario1;
 		public Token ni1;
-		public Op_unarioContext op_unario2;
+		public Op_unarioContext op_unario;
+		public List<Op_unarioContext> op_unario2 = new ArrayList<Op_unarioContext>();
 		public Token ni2;
 		public List<TerminalNode> NUM_INT() { return getTokens(LAParser.NUM_INT); }
 		public TerminalNode NUM_INT(int i) {
@@ -2584,7 +2587,8 @@ public class LAParser extends Parser {
 				if (_la==T__45) {
 					{
 					setState(427);
-					((Numero_intervaloContext)_localctx).op_unario2 = op_unario();
+					((Numero_intervaloContext)_localctx).op_unario = op_unario();
+					((Numero_intervaloContext)_localctx).op_unario2.add(((Numero_intervaloContext)_localctx).op_unario);
 					}
 				}
 
