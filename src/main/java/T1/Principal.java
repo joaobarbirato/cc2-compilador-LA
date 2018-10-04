@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,13 +36,27 @@ public class Principal {
                     output.println(pce.getMessage ());
                 }
             }
-
+/*
             if(!sp.modificado) {
                 sp.reset();
                 AnalisadorSemantico semantico = new AnalisadorSemantico(sp);
                 semantico.visitPrograma(arvore);
-            }
-            output.print(sp.toString ());
+                if(!sp.modificado) {
+                    sp.reset();
+                    GeradorDeCodigo gerador = new GeradorDeCodigo(sp);
+                    gerador.visitPrograma(arvore);
+                }
+
+            }*/
+
+            GeradorDeCodigo gerador = new GeradorDeCodigo (sp, output);
+            String s = (String) gerador.visitPrograma(arvore);
+            output.println ( s );
+//            if(!sp.modificado) {
+//            sp.reset();
+//            output.print ( sp.toString () );
+//            output.println( "Fim da compilacao" );
+//            }
         }
     }
 }
