@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,12 +38,10 @@ public class Principal {
 
             if(!sp.modificado) {
                 sp.reset();
-                T1Visitor semantico = new T1Visitor(sp);
+                AnalisadorSemantico semantico = new AnalisadorSemantico(sp);
                 semantico.visitPrograma(arvore);
             }
-
             output.print(sp.toString ());
-            output.println("Fim da compilacao");
         }
     }
 }

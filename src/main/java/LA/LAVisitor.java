@@ -1,4 +1,4 @@
-// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
+// Generated from LA.g4 by ANTLR 4.7.1
 package LA;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -29,11 +29,26 @@ public interface LAVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDecl_local_global(LAParser.Decl_local_globalContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link LAParser#declaracao_local}.
+	 * Visit a parse tree produced by the {@code declaracao_local_declare}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDeclaracao_local(LAParser.Declaracao_localContext ctx);
+	T visitDeclaracao_local_declare(LAParser.Declaracao_local_declareContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declaracao_local_constante}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaracao_local_constante(LAParser.Declaracao_local_constanteContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code declaracao_local_tipo}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaracao_local_tipo(LAParser.Declaracao_local_tipoContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LAParser#variavel}.
 	 * @param ctx the parse tree

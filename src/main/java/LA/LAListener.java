@@ -1,4 +1,4 @@
-// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
+// Generated from LA.g4 by ANTLR 4.7.1
 package LA;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -38,15 +38,41 @@ public interface LAListener extends ParseTreeListener {
 	 */
 	void exitDecl_local_global(LAParser.Decl_local_globalContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link LAParser#declaracao_local}.
+	 * Enter a parse tree produced by the {@code declaracao_local_declare}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
 	 * @param ctx the parse tree
 	 */
-	void enterDeclaracao_local(LAParser.Declaracao_localContext ctx);
+	void enterDeclaracao_local_declare(LAParser.Declaracao_local_declareContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link LAParser#declaracao_local}.
+	 * Exit a parse tree produced by the {@code declaracao_local_declare}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
 	 * @param ctx the parse tree
 	 */
-	void exitDeclaracao_local(LAParser.Declaracao_localContext ctx);
+	void exitDeclaracao_local_declare(LAParser.Declaracao_local_declareContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code declaracao_local_constante}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaracao_local_constante(LAParser.Declaracao_local_constanteContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code declaracao_local_constante}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaracao_local_constante(LAParser.Declaracao_local_constanteContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code declaracao_local_tipo}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaracao_local_tipo(LAParser.Declaracao_local_tipoContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code declaracao_local_tipo}
+	 * labeled alternative in {@link LAParser#declaracao_local}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaracao_local_tipo(LAParser.Declaracao_local_tipoContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LAParser#variavel}.
 	 * @param ctx the parse tree
