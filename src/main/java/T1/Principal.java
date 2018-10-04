@@ -37,27 +37,26 @@ public class Principal {
                     output.println(pce.getMessage ());
                 }
             }
-/*
+
             if(!sp.modificado) {
-                sp.reset();
-                T1Visitor semantico = new T1Visitor(sp);
-                semantico.visitPrograma(arvore);
-                if(!sp.modificado) {
+                if ( args[0].contains("semantico") ){
                     sp.reset();
-                    GeradorDeCodigo gerador = new GeradorDeCodigo(sp);
-                    gerador.visitPrograma(arvore);
+                    // TODO: insira aqui a chamada pro semantico
                 }
+                if(!sp.modificado && args[0].contains ( "sem_erros" )) {
+                    sp.reset();
+                    GeradorDeCodigo gerador = new GeradorDeCodigo (sp);
+                    gerador.visitPrograma(arvore);
+                    output.println ( sp.toString () );
+                }else{
+                    output.print ( sp.toString () );
+                    output.println( "Fim da compilacao" );
+                }
+            }else if (args[0].contains("sintatico")){
+                output.print ( sp.toString () );
+                output.println( "Fim da compilacao" );
+            }
 
-            }*/
-
-            GeradorDeCodigo gerador = new GeradorDeCodigo (sp, output);
-            String s = (String) gerador.visitPrograma(arvore);
-            output.println ( s );
-//            if(!sp.modificado) {
-//            sp.reset();
-//            output.print ( sp.toString () );
-//            output.println( "Fim da compilacao" );
-//            }
         }
     }
 }
