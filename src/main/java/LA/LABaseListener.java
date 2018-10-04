@@ -52,37 +52,13 @@ public class LABaseListener implements LAListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaracao_local_declare(LAParser.Declaracao_local_declareContext ctx) { }
+	@Override public void enterDeclaracao_local(LAParser.Declaracao_localContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaracao_local_declare(LAParser.Declaracao_local_declareContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclaracao_local_constante(LAParser.Declaracao_local_constanteContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclaracao_local_constante(LAParser.Declaracao_local_constanteContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclaracao_local_tipo(LAParser.Declaracao_local_tipoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclaracao_local_tipo(LAParser.Declaracao_local_tipoContext ctx) { }
+	@Override public void exitDeclaracao_local(LAParser.Declaracao_localContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

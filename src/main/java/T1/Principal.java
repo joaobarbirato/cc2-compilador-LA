@@ -36,27 +36,22 @@ public class Principal {
                     output.println(pce.getMessage ());
                 }
             }
-/*
+
             if(!sp.modificado) {
                 sp.reset();
                 AnalisadorSemantico semantico = new AnalisadorSemantico(sp);
                 semantico.visitPrograma(arvore);
-                if(!sp.modificado) {
+                if(!sp.isModificado()){
                     sp.reset();
-                    GeradorDeCodigo gerador = new GeradorDeCodigo(sp);
+                    GeradorDeCodigo gerador = new GeradorDeCodigo(sp, output);
                     gerador.visitPrograma(arvore);
+                }else{
+                    sp.println("Fim da compilacao");
                 }
-
-            }*/
-
-            GeradorDeCodigo gerador = new GeradorDeCodigo (sp, output);
-            String s = (String) gerador.visitPrograma(arvore);
-            output.println ( s );
-//            if(!sp.modificado) {
-//            sp.reset();
-//            output.print ( sp.toString () );
-//            output.println( "Fim da compilacao" );
-//            }
+            }else{
+                sp.println("Fim da compilacao");
+            }
+            output.print(sp.toString());
         }
     }
 }

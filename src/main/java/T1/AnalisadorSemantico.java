@@ -21,9 +21,6 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
         visitCorpo(ctx.corpo());
 
         pilhaDeEscopos.desempilhar();
-        if(sp.modificado) {
-            sp.println("Fim da compilacao");
-        }
         return null;
     }
 
@@ -66,6 +63,4 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
         }
         return null;
     }
-
-
 }
