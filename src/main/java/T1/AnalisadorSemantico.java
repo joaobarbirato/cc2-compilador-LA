@@ -59,10 +59,13 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
         }
         return null;
     }
+/*
 
     @Override
     public Object visitCmdAtribuicao(LAParser.CmdAtribuicaoContext ctx) {
         String tipoAtribuir = pilhaDeEscopos.getSimboloTipo(ctx.identificador().getText());
         String tipoAtribuido =
     }
+*/
 }
+

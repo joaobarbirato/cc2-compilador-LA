@@ -40,7 +40,8 @@ public class Principal {
             if(!sp.modificado) {
                 if ( args[0].contains("semantico") ){
                     sp.reset();
-                    // TODO: insira aqui a chamada pro semantico
+                    AnalisadorSemantico analisador = new AnalisadorSemantico(sp);
+                    analisador.visitPrograma(arvore);
                 }
                 if(!sp.modificado && args[0].contains ( "sem_erros" )) {
                     sp.reset();
