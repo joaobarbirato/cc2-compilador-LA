@@ -38,12 +38,24 @@ public class Principal {
             }
 
             if(!sp.modificado) {
-                sp.reset();
-                AnalisadorSemantico semantico = new AnalisadorSemantico(sp);
-                semantico.visitPrograma(arvore);
-                sp.println("Fim da compilacao");
+                if ( args[0].contains("semantico") ){
+                    sp.reset();
+                    // TODO: insira aqui a chamada pro semantico
+                }
+                if(!sp.modificado && args[0].contains ( "sem_erros" )) {
+                    sp.reset();
+                    GeradorDeCodigo gerador = new GeradorDeCodigo (sp);
+                    gerador.visitPrograma(arvore);
+                    output.println ( sp.toString () );
+                }else{
+                    output.print ( sp.toString () );
+                    output.println( "Fim da compilacao" );
+                }
+            }else if (args[0].contains("sintatico")){
+                output.print ( sp.toString () );
+                output.println( "Fim da compilacao" );
             }
-            output.print(sp.toString());
+
         }
     }
 }
