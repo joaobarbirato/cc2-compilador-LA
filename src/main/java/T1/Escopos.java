@@ -41,6 +41,14 @@ public class Escopos {
         return false;
     }
 
+    public String getSimboloTipo(String nome){
+        for(TabelaDeSimbolos tabela: pilhaDeEscopos){
+            if(tabela.existeSimbolo(nome)){
+                return tabela.getTipo(nome);
+            }
+        }
+        return "falso";
+    }
     public void adicionaSimboloTopo (EntradaTabelaDeSimbolos ets){
         this.escopoAtual ().adicionarSimbolo ( ets.getNome (), ets.getTipo () );
     };

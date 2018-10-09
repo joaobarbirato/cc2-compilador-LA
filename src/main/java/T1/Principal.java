@@ -41,14 +41,6 @@ public class Principal {
                 sp.reset();
                 AnalisadorSemantico semantico = new AnalisadorSemantico(sp);
                 semantico.visitPrograma(arvore);
-                if(!sp.isModificado()){
-                    sp.reset();
-                    GeradorDeCodigo gerador = new GeradorDeCodigo(sp, output);
-                    gerador.visitPrograma(arvore);
-                }else{
-                    sp.println("Fim da compilacao");
-                }
-            }else{
                 sp.println("Fim da compilacao");
             }
             output.print(sp.toString());
