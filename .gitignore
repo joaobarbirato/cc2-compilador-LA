@@ -8,3 +8,5 @@ gen/
 target/
 tmp/
 out/
+
+debug
