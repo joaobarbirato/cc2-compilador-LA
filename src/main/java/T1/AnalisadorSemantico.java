@@ -9,7 +9,7 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
     private Escopos pilhaDeEscopos;
     private SaidaParser sp;
     private List<String> listaTipos;
-
+    private String bufferTipoExp = "null";
     public AnalisadorSemantico(SaidaParser sp) {
         this.sp = sp;
     }
@@ -63,26 +63,28 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
     @Override
     public Object visitCmdAtribuicao(LAParser.CmdAtribuicaoContext ctx) {
         String tipoVariavel = pilhaDeEscopos.getSimboloTipo(ctx.identificador().getText());
-        String tipoAtribuido = visitExpressao(ctx.expressao());
+       bufferTipoExp = "null";
+        visitExpressao(ctx.expressao());
 
-        if(tipoAtribuido.equals("inteiro") && tipoVariavel.equals("real")){
-            tipoAtribuido = "inteiro";
+        if(bufferTipoExp.equals("inteiro") && tipoVariavel.equals("real")){
+            bufferTipoExp = "real";
         }
-        if(!tipoVariavel.equals(tipoAtribuido)){
+        if(!tipoVariavel.equals(bufferTipoExp)){
             sp.println("Linha "+ ctx.identificador().getStart().getLine() + ": atribuicao nao compativel para " + ctx.identificador().getText());
         }
         return null;
     }
 
+    /*
     @Override
     public String visitExpressao(LAParser.ExpressaoContext ctx) {
-        String tipo = "null";
         if(ctx.termo_logico() != null){
-            tipo = visitTermo_logico(ctx.termo_l1);
+            visitTermo_logico(ctx.termo_l1);
+            */
+/*for(LAParser.Termo_logicoContext outroTermo: ctx.outrosTermos){
+                if(!visitTermo_logico(outroTermo).equals(tipo))
+            }*//*
 
-            for(LAParser.Termo_logicoContext outroTermo: ctx.outrosTermos){
-
-            }
         }
         return tipo;
     }
@@ -95,8 +97,9 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
         }
         return tipo;
     }
+*/
 
-    @Override
+/*    @Override
     public String visitFator_logico(LAParser.Fator_logicoContext ctx) {
         String tipo = "null";
         if(ctx.parcela_logica() != null){
@@ -107,30 +110,25 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
 
     @Override
     public String visitParcela_logica(LAParser.Parcela_logicaContext ctx) {
-        String tipo = "null";
-        if(!ctx.isEmpty()){
-            tipo = "logico";
-            return tipo;
-        }else{
-            if(ctx.exp_relacional() != null){
-                tipo = visitExp_relacional(ctx.exp_relacional());
-            }
+        String tipo = "logico";
+        if(ctx.exp_relacional() != null){
+            tipo = visitExp_relacional(ctx.exp_relacional());
         }
+
         return tipo;
     }
-
+*/
     @Override
-    public String visitExp_relacional(LAParser.Exp_relacionalContext ctx) {
-        String tipo = "null";
+    public Object visitExp_relacional(LAParser.Exp_relacionalContext ctx) {
         if(ctx.exp_a1 != null){
-            tipo = visitExp_aritimetica(ctx.exp_a1);
+            visitExp_aritimetica(ctx.exp_a1);
         }
         if(ctx.op_relacional != null){
-            tipo = "logico";
+            bufferTipoExp = "logico";
         }
-        return tipo;
+        return null;
     }
-
+/*
     @Override
     public String visitExp_aritimetica(LAParser.Exp_aritimeticaContext ctx) {
         String tipo = "null";
@@ -166,14 +164,36 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
         String tipo = "null";
 
         if(ctx.parcela_unario() != null){
-
+            tipo = (String) visit(ctx.parcela_unario());
+            //return "real";
         }
-        return "real";
+        return tipo;
+    }*/
+
+
+    @Override
+    public Object visitParcela_unario_id(LAParser.Parcela_unario_idContext ctx) {
+        visitIdentificador(ctx.identificador());
+        bufferTipoExp = pilhaDeEscopos.getSimboloTipo(ctx.identificador().getText());
+        return null;
     }
 
     @Override
-    public String visitParcela_unario_id(LAParser.Parcela_unario_idContext ctx) {
-        return pilhaDeEscopos.getSimboloTipo(ctx.identificador().getText());
+    public Object visitParcela_unario_inteiro(LAParser.Parcela_unario_inteiroContext ctx) {
+        bufferTipoExp = "inteiro";
+        return null;
+    }
+
+    @Override
+    public Object visitParcela_unario_real(LAParser.Parcela_unario_realContext ctx) {
+        bufferTipoExp = "real";
+        return null;
+    }
+
+    @Override
+    public Object visitParcela_nao_unario_cadeia(LAParser.Parcela_nao_unario_cadeiaContext ctx) {
+        bufferTipoExp = "literal";
+        return null;
     }
 }
 
