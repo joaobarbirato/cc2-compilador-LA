@@ -86,7 +86,7 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
         }
         return null;
     }
-    
+
     @Override
     public Object visitExp_relacional(LAParser.Exp_relacionalContext ctx) {
         if(ctx.exp_a1 != null){
