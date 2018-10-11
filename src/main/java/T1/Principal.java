@@ -41,9 +41,11 @@ public class Principal {
             if(!sp.modificado) {
                 if ( args[0].contains("semantico") ){
                     sp.reset();
-                    // TODO: insira aqui a chamada pro semantico
-                }
-                if(!sp.modificado && args[0].contains ( "sem_erros" )) {
+                    AnalisadorSemantico as = new AnalisadorSemantico ( sp );
+                    as.visitPrograma ( arvore );
+                    output.print ( sp.toString () );
+                    output.println( "Fim da compilacao" );
+                }else if( args[0].contains ( "sem_erros" )) {
                     sp.reset();
                     GeradorDeCodigo gerador = new GeradorDeCodigo (sp);
                     gerador.visitPrograma(arvore);
