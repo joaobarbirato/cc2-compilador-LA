@@ -8,6 +8,7 @@ import java.util.List;
 public class AnalisadorSemantico extends LABaseVisitor<Object> {
     private Escopos pilhaDeEscopos;
     private SaidaParser sp;
+    //Variavel utilizada para conferir o tipo no Comando Atribuição
     private String bufferTipoExp = "null";
     public AnalisadorSemantico(SaidaParser sp) {
         this.sp = sp;
@@ -92,6 +93,7 @@ public class AnalisadorSemantico extends LABaseVisitor<Object> {
         if(ctx.exp_a1 != null){
             visitExp_aritimetica(ctx.exp_a1);
         }
+        //Caso haja um operador relacional, considera a atribuição sendo lógica
         if(ctx.op_relacional != null){
             bufferTipoExp = "logico";
         }
