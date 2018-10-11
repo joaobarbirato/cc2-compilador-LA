@@ -1,4 +1,4 @@
-// Generated from /home/rastakhan/Documents/UFSCar/CC2/cc2-compilador-LA/src/main/antlr4/LA.g4 by ANTLR 4.7
+// Generated from LA.g4 by ANTLR 4.7.1
 package LA;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
 public class LAParser extends Parser {
-	static { RuntimeMetaData.checkVersion("4.7", RuntimeMetaData.VERSION); }
+	static { RuntimeMetaData.checkVersion("4.7.1", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
 	protected static final PredictionContextCache _sharedContextCache =
@@ -26,7 +26,7 @@ public class LAParser extends Parser {
 		T__45=46, T__46=47, T__47=48, T__48=49, T__49=50, T__50=51, T__51=52, 
 		T__52=53, T__53=54, T__54=55, T__55=56, T__56=57, T__57=58, T__58=59, 
 		WS=60, ENDL=61, NUM_INT=62, NUM_REAL=63, CADEIA=64, IDENT=65, COMENTARIO=66, 
-		COMENTARIO_NAO_FECHADO=67, ERRO=68;
+		COMENTARIO_NAO_FECHADO=67, ERRO=68, ERROR=69;
 	public static final int
 		RULE_programa = 0, RULE_declaracoes = 1, RULE_decl_local_global = 2, RULE_declaracao_local = 3, 
 		RULE_variavel = 4, RULE_identificador = 5, RULE_dimensao = 6, RULE_tipo = 7, 
@@ -73,7 +73,7 @@ public class LAParser extends Parser {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		"WS", "ENDL", "NUM_INT", "NUM_REAL", "CADEIA", "IDENT", "COMENTARIO", 
-		"COMENTARIO_NAO_FECHADO", "ERRO"
+		"COMENTARIO_NAO_FECHADO", "ERRO", "ERROR"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -397,14 +397,17 @@ public class LAParser extends Parser {
 	}
 
 	public static class VariavelContext extends ParserRuleContext {
+		public IdentificadorContext identificador1;
+		public IdentificadorContext identificador;
+		public List<IdentificadorContext> outrosIdentificadores = new ArrayList<IdentificadorContext>();
+		public TipoContext tipo() {
+			return getRuleContext(TipoContext.class,0);
+		}
 		public List<IdentificadorContext> identificador() {
 			return getRuleContexts(IdentificadorContext.class);
 		}
 		public IdentificadorContext identificador(int i) {
 			return getRuleContext(IdentificadorContext.class,i);
-		}
-		public TipoContext tipo() {
-			return getRuleContext(TipoContext.class,0);
 		}
 		public VariavelContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -433,7 +436,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(130);
-			identificador();
+			((VariavelContext)_localctx).identificador1 = identificador();
 			setState(135);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -443,7 +446,8 @@ public class LAParser extends Parser {
 				setState(131);
 				match(T__7);
 				setState(132);
-				identificador();
+				((VariavelContext)_localctx).identificador = identificador();
+				((VariavelContext)_localctx).outrosIdentificadores.add(((VariavelContext)_localctx).identificador);
 				}
 				}
 				setState(137);
@@ -468,12 +472,15 @@ public class LAParser extends Parser {
 	}
 
 	public static class IdentificadorContext extends ParserRuleContext {
+		public Token ident1;
+		public Token IDENT;
+		public List<Token> outrosIdent = new ArrayList<Token>();
+		public DimensaoContext dimensao() {
+			return getRuleContext(DimensaoContext.class,0);
+		}
 		public List<TerminalNode> IDENT() { return getTokens(LAParser.IDENT); }
 		public TerminalNode IDENT(int i) {
 			return getToken(LAParser.IDENT, i);
-		}
-		public DimensaoContext dimensao() {
-			return getRuleContext(DimensaoContext.class,0);
 		}
 		public IdentificadorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -502,7 +509,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(141);
-			match(IDENT);
+			((IdentificadorContext)_localctx).ident1 = match(IDENT);
 			setState(146);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -512,7 +519,8 @@ public class LAParser extends Parser {
 				setState(142);
 				match(T__8);
 				setState(143);
-				match(IDENT);
+				((IdentificadorContext)_localctx).IDENT = match(IDENT);
+				((IdentificadorContext)_localctx).outrosIdent.add(((IdentificadorContext)_localctx).IDENT);
 				}
 				}
 				setState(148);
@@ -951,6 +959,60 @@ public class LAParser extends Parser {
 	}
 
 	public static class Declaracao_globalContext extends ParserRuleContext {
+		public Declaracao_globalContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_declaracao_global; }
+	 
+		public Declaracao_globalContext() { }
+		public void copyFrom(Declaracao_globalContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class Declaracao_global_funcaoContext extends Declaracao_globalContext {
+		public Declaracao_localContext declaracao_local;
+		public List<Declaracao_localContext> listaDL = new ArrayList<Declaracao_localContext>();
+		public CmdContext cmd;
+		public List<CmdContext> listaComandos = new ArrayList<CmdContext>();
+		public TerminalNode IDENT() { return getToken(LAParser.IDENT, 0); }
+		public Tipo_estendidoContext tipo_estendido() {
+			return getRuleContext(Tipo_estendidoContext.class,0);
+		}
+		public ParametrosContext parametros() {
+			return getRuleContext(ParametrosContext.class,0);
+		}
+		public List<Declaracao_localContext> declaracao_local() {
+			return getRuleContexts(Declaracao_localContext.class);
+		}
+		public Declaracao_localContext declaracao_local(int i) {
+			return getRuleContext(Declaracao_localContext.class,i);
+		}
+		public List<CmdContext> cmd() {
+			return getRuleContexts(CmdContext.class);
+		}
+		public CmdContext cmd(int i) {
+			return getRuleContext(CmdContext.class,i);
+		}
+		public Declaracao_global_funcaoContext(Declaracao_globalContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterDeclaracao_global_funcao(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitDeclaracao_global_funcao(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitDeclaracao_global_funcao(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class Declaracao_global_procedimentoContext extends Declaracao_globalContext {
+		public Declaracao_localContext declaracao_local;
+		public List<Declaracao_localContext> listaDL = new ArrayList<Declaracao_localContext>();
+		public CmdContext cmd;
+		public List<CmdContext> listaComandos = new ArrayList<CmdContext>();
 		public TerminalNode IDENT() { return getToken(LAParser.IDENT, 0); }
 		public ParametrosContext parametros() {
 			return getRuleContext(ParametrosContext.class,0);
@@ -967,24 +1029,18 @@ public class LAParser extends Parser {
 		public CmdContext cmd(int i) {
 			return getRuleContext(CmdContext.class,i);
 		}
-		public Tipo_estendidoContext tipo_estendido() {
-			return getRuleContext(Tipo_estendidoContext.class,0);
-		}
-		public Declaracao_globalContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_declaracao_global; }
+		public Declaracao_global_procedimentoContext(Declaracao_globalContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LAListener ) ((LAListener)listener).enterDeclaracao_global(this);
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterDeclaracao_global_procedimento(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LAListener ) ((LAListener)listener).exitDeclaracao_global(this);
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitDeclaracao_global_procedimento(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitDeclaracao_global(this);
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitDeclaracao_global_procedimento(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -998,6 +1054,7 @@ public class LAParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__20:
+				_localctx = new Declaracao_global_procedimentoContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(186);
@@ -1025,7 +1082,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(193);
-					declaracao_local();
+					((Declaracao_global_procedimentoContext)_localctx).declaracao_local = declaracao_local();
+					((Declaracao_global_procedimentoContext)_localctx).listaDL.add(((Declaracao_global_procedimentoContext)_localctx).declaracao_local);
 					}
 					}
 					setState(198);
@@ -1039,7 +1097,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(199);
-					cmd();
+					((Declaracao_global_procedimentoContext)_localctx).cmd = cmd();
+					((Declaracao_global_procedimentoContext)_localctx).listaComandos.add(((Declaracao_global_procedimentoContext)_localctx).cmd);
 					}
 					}
 					setState(204);
@@ -1051,6 +1110,7 @@ public class LAParser extends Parser {
 				}
 				break;
 			case T__24:
+				_localctx = new Declaracao_global_funcaoContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(206);
@@ -1082,7 +1142,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(215);
-					declaracao_local();
+					((Declaracao_global_funcaoContext)_localctx).declaracao_local = declaracao_local();
+					((Declaracao_global_funcaoContext)_localctx).listaDL.add(((Declaracao_global_funcaoContext)_localctx).declaracao_local);
 					}
 					}
 					setState(220);
@@ -1096,7 +1157,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(221);
-					cmd();
+					((Declaracao_global_funcaoContext)_localctx).cmd = cmd();
+					((Declaracao_global_funcaoContext)_localctx).listaComandos.add(((Declaracao_global_funcaoContext)_localctx).cmd);
 					}
 					}
 					setState(226);
@@ -1123,14 +1185,17 @@ public class LAParser extends Parser {
 	}
 
 	public static class ParametroContext extends ParserRuleContext {
+		public IdentificadorContext identificador1;
+		public IdentificadorContext identificador;
+		public List<IdentificadorContext> outrosIdentificadores = new ArrayList<IdentificadorContext>();
+		public Tipo_estendidoContext tipo_estendido() {
+			return getRuleContext(Tipo_estendidoContext.class,0);
+		}
 		public List<IdentificadorContext> identificador() {
 			return getRuleContexts(IdentificadorContext.class);
 		}
 		public IdentificadorContext identificador(int i) {
 			return getRuleContext(IdentificadorContext.class,i);
-		}
-		public Tipo_estendidoContext tipo_estendido() {
-			return getRuleContext(Tipo_estendidoContext.class,0);
 		}
 		public ParametroContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1169,7 +1234,7 @@ public class LAParser extends Parser {
 			}
 
 			setState(234);
-			identificador();
+			((ParametroContext)_localctx).identificador1 = identificador();
 			setState(239);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1179,7 +1244,8 @@ public class LAParser extends Parser {
 				setState(235);
 				match(T__7);
 				setState(236);
-				identificador();
+				((ParametroContext)_localctx).identificador = identificador();
+				((ParametroContext)_localctx).outrosIdentificadores.add(((ParametroContext)_localctx).identificador);
 				}
 				}
 				setState(241);
@@ -1204,6 +1270,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class ParametrosContext extends ParserRuleContext {
+		public ParametroContext parametro1;
+		public ParametroContext parametro;
+		public List<ParametroContext> outrosParametros = new ArrayList<ParametroContext>();
 		public List<ParametroContext> parametro() {
 			return getRuleContexts(ParametroContext.class);
 		}
@@ -1237,7 +1306,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(245);
-			parametro();
+			((ParametrosContext)_localctx).parametro1 = parametro();
 			setState(250);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1247,7 +1316,8 @@ public class LAParser extends Parser {
 				setState(246);
 				match(T__7);
 				setState(247);
-				parametro();
+				((ParametrosContext)_localctx).parametro = parametro();
+				((ParametrosContext)_localctx).outrosParametros.add(((ParametrosContext)_localctx).parametro);
 				}
 				}
 				setState(252);
@@ -1268,6 +1338,10 @@ public class LAParser extends Parser {
 	}
 
 	public static class CorpoContext extends ParserRuleContext {
+		public Declaracao_localContext declaracao_local;
+		public List<Declaracao_localContext> listaDL = new ArrayList<Declaracao_localContext>();
+		public CmdContext cmd;
+		public List<CmdContext> listaComandos = new ArrayList<CmdContext>();
 		public List<Declaracao_localContext> declaracao_local() {
 			return getRuleContexts(Declaracao_localContext.class);
 		}
@@ -1313,7 +1387,8 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(253);
-				declaracao_local();
+				((CorpoContext)_localctx).declaracao_local = declaracao_local();
+				((CorpoContext)_localctx).listaDL.add(((CorpoContext)_localctx).declaracao_local);
 				}
 				}
 				setState(258);
@@ -1327,7 +1402,8 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(259);
-				cmd();
+				((CorpoContext)_localctx).cmd = cmd();
+				((CorpoContext)_localctx).listaComandos.add(((CorpoContext)_localctx).cmd);
 				}
 				}
 				setState(264);
@@ -1488,6 +1564,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdLeiaContext extends ParserRuleContext {
+		public IdentificadorContext id1;
+		public IdentificadorContext identificador;
+		public List<IdentificadorContext> outrosIds = new ArrayList<IdentificadorContext>();
 		public List<IdentificadorContext> identificador() {
 			return getRuleContexts(IdentificadorContext.class);
 		}
@@ -1535,7 +1614,7 @@ public class LAParser extends Parser {
 			}
 
 			setState(282);
-			identificador();
+			((CmdLeiaContext)_localctx).id1 = identificador();
 			setState(290);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1555,7 +1634,8 @@ public class LAParser extends Parser {
 				}
 
 				setState(287);
-				identificador();
+				((CmdLeiaContext)_localctx).identificador = identificador();
+				((CmdLeiaContext)_localctx).outrosIds.add(((CmdLeiaContext)_localctx).identificador);
 				}
 				}
 				setState(292);
@@ -1578,6 +1658,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdEscrevaContext extends ParserRuleContext {
+		public ExpressaoContext exp1;
+		public ExpressaoContext expressao;
+		public List<ExpressaoContext> outrasExp = new ArrayList<ExpressaoContext>();
 		public List<ExpressaoContext> expressao() {
 			return getRuleContexts(ExpressaoContext.class);
 		}
@@ -1615,7 +1698,7 @@ public class LAParser extends Parser {
 			setState(296);
 			match(T__21);
 			setState(297);
-			expressao();
+			((CmdEscrevaContext)_localctx).exp1 = expressao();
 			setState(302);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1625,7 +1708,8 @@ public class LAParser extends Parser {
 				setState(298);
 				match(T__7);
 				setState(299);
-				expressao();
+				((CmdEscrevaContext)_localctx).expressao = expressao();
+				((CmdEscrevaContext)_localctx).outrasExp.add(((CmdEscrevaContext)_localctx).expressao);
 				}
 				}
 				setState(304);
@@ -1648,6 +1732,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdSeContext extends ParserRuleContext {
+		public CmdContext cmd;
+		public List<CmdContext> cmdEntao = new ArrayList<CmdContext>();
+		public List<CmdContext> cmdSenao = new ArrayList<CmdContext>();
 		public ExpressaoContext expressao() {
 			return getRuleContext(ExpressaoContext.class,0);
 		}
@@ -1696,7 +1783,8 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(310);
-				cmd();
+				((CmdSeContext)_localctx).cmd = cmd();
+				((CmdSeContext)_localctx).cmdEntao.add(((CmdSeContext)_localctx).cmd);
 				}
 				}
 				setState(315);
@@ -1717,7 +1805,8 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(317);
-					cmd();
+					((CmdSeContext)_localctx).cmd = cmd();
+					((CmdSeContext)_localctx).cmdSenao.add(((CmdSeContext)_localctx).cmd);
 					}
 					}
 					setState(322);
@@ -1829,6 +1918,8 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdParaContext extends ParserRuleContext {
+		public Exp_aritimeticaContext exp_aritmetica1;
+		public Exp_aritimeticaContext exp_aritmetica2;
 		public TerminalNode IDENT() { return getToken(LAParser.IDENT, 0); }
 		public List<Exp_aritimeticaContext> exp_aritimetica() {
 			return getRuleContexts(Exp_aritimeticaContext.class);
@@ -1875,11 +1966,11 @@ public class LAParser extends Parser {
 			setState(344);
 			match(T__37);
 			setState(345);
-			exp_aritimetica();
+			((CmdParaContext)_localctx).exp_aritmetica1 = exp_aritimetica();
 			setState(346);
 			match(T__38);
 			setState(347);
-			exp_aritimetica();
+			((CmdParaContext)_localctx).exp_aritmetica2 = exp_aritimetica();
 			setState(348);
 			match(T__39);
 			setState(352);
@@ -2114,6 +2205,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class CmdChamadaContext extends ParserRuleContext {
+		public ExpressaoContext exp1;
+		public ExpressaoContext expressao;
+		public List<ExpressaoContext> outrasExp = new ArrayList<ExpressaoContext>();
 		public TerminalNode IDENT() { return getToken(LAParser.IDENT, 0); }
 		public List<ExpressaoContext> expressao() {
 			return getRuleContexts(ExpressaoContext.class);
@@ -2152,7 +2246,7 @@ public class LAParser extends Parser {
 			setState(386);
 			match(T__21);
 			setState(387);
-			expressao();
+			((CmdChamadaContext)_localctx).exp1 = expressao();
 			setState(392);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2162,7 +2256,8 @@ public class LAParser extends Parser {
 				setState(388);
 				match(T__7);
 				setState(389);
-				expressao();
+				((CmdChamadaContext)_localctx).expressao = expressao();
+				((CmdChamadaContext)_localctx).outrasExp.add(((CmdChamadaContext)_localctx).expressao);
 				}
 				}
 				setState(394);
@@ -2358,6 +2453,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class ConstantesContext extends ParserRuleContext {
+		public Numero_intervaloContext numero_intervalo1;
+		public Numero_intervaloContext numero_intervalo;
+		public List<Numero_intervaloContext> outrosNumero_intervalo = new ArrayList<Numero_intervaloContext>();
 		public List<Numero_intervaloContext> numero_intervalo() {
 			return getRuleContexts(Numero_intervaloContext.class);
 		}
@@ -2391,7 +2489,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(414);
-			numero_intervalo();
+			((ConstantesContext)_localctx).numero_intervalo1 = numero_intervalo();
 			setState(419);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2401,7 +2499,8 @@ public class LAParser extends Parser {
 				setState(415);
 				match(T__7);
 				setState(416);
-				numero_intervalo();
+				((ConstantesContext)_localctx).numero_intervalo = numero_intervalo();
+				((ConstantesContext)_localctx).outrosNumero_intervalo.add(((ConstantesContext)_localctx).numero_intervalo);
 				}
 				}
 				setState(421);
@@ -2422,6 +2521,11 @@ public class LAParser extends Parser {
 	}
 
 	public static class Numero_intervaloContext extends ParserRuleContext {
+		public Op_unarioContext op_unario1;
+		public Token ni1;
+		public Op_unarioContext op_unario;
+		public List<Op_unarioContext> op_unario2 = new ArrayList<Op_unarioContext>();
+		public Token ni2;
 		public List<TerminalNode> NUM_INT() { return getTokens(LAParser.NUM_INT); }
 		public TerminalNode NUM_INT(int i) {
 			return getToken(LAParser.NUM_INT, i);
@@ -2464,12 +2568,12 @@ public class LAParser extends Parser {
 			if (_la==T__45) {
 				{
 				setState(422);
-				op_unario();
+				((Numero_intervaloContext)_localctx).op_unario1 = op_unario();
 				}
 			}
 
 			setState(425);
-			match(NUM_INT);
+			((Numero_intervaloContext)_localctx).ni1 = match(NUM_INT);
 			setState(431);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2483,12 +2587,13 @@ public class LAParser extends Parser {
 				if (_la==T__45) {
 					{
 					setState(427);
-					op_unario();
+					((Numero_intervaloContext)_localctx).op_unario = op_unario();
+					((Numero_intervaloContext)_localctx).op_unario2.add(((Numero_intervaloContext)_localctx).op_unario);
 					}
 				}
 
 				setState(430);
-				match(NUM_INT);
+				((Numero_intervaloContext)_localctx).ni2 = match(NUM_INT);
 				}
 			}
 
@@ -2547,6 +2652,11 @@ public class LAParser extends Parser {
 	}
 
 	public static class Exp_aritimeticaContext extends ParserRuleContext {
+		public TermoContext termo1;
+		public Op1Context op1;
+		public List<Op1Context> ops = new ArrayList<Op1Context>();
+		public TermoContext termo;
+		public List<TermoContext> outrosTermos = new ArrayList<TermoContext>();
 		public List<TermoContext> termo() {
 			return getRuleContexts(TermoContext.class);
 		}
@@ -2586,7 +2696,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(435);
-			termo();
+			((Exp_aritimeticaContext)_localctx).termo1 = termo();
 			setState(441);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,43,_ctx);
@@ -2595,9 +2705,11 @@ public class LAParser extends Parser {
 					{
 					{
 					setState(436);
-					op1();
+					((Exp_aritimeticaContext)_localctx).op1 = op1();
+					((Exp_aritimeticaContext)_localctx).ops.add(((Exp_aritimeticaContext)_localctx).op1);
 					setState(437);
-					termo();
+					((Exp_aritimeticaContext)_localctx).termo = termo();
+					((Exp_aritimeticaContext)_localctx).outrosTermos.add(((Exp_aritimeticaContext)_localctx).termo);
 					}
 					} 
 				}
@@ -2619,6 +2731,11 @@ public class LAParser extends Parser {
 	}
 
 	public static class TermoContext extends ParserRuleContext {
+		public FatorContext fator1;
+		public Op2Context op2;
+		public List<Op2Context> ops = new ArrayList<Op2Context>();
+		public FatorContext fator;
+		public List<FatorContext> outrosFatores = new ArrayList<FatorContext>();
 		public List<FatorContext> fator() {
 			return getRuleContexts(FatorContext.class);
 		}
@@ -2658,7 +2775,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(444);
-			fator();
+			((TermoContext)_localctx).fator1 = fator();
 			setState(450);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2666,9 +2783,11 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(445);
-				op2();
+				((TermoContext)_localctx).op2 = op2();
+				((TermoContext)_localctx).ops.add(((TermoContext)_localctx).op2);
 				setState(446);
-				fator();
+				((TermoContext)_localctx).fator = fator();
+				((TermoContext)_localctx).outrosFatores.add(((TermoContext)_localctx).fator);
 				}
 				}
 				setState(452);
@@ -2689,6 +2808,9 @@ public class LAParser extends Parser {
 	}
 
 	public static class FatorContext extends ParserRuleContext {
+		public ParcelaContext parcela1;
+		public Op3Context op3;
+		public List<Op3Context> ops = new ArrayList<Op3Context>();
 		public List<ParcelaContext> parcela() {
 			return getRuleContexts(ParcelaContext.class);
 		}
@@ -2728,7 +2850,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(453);
-			parcela();
+			((FatorContext)_localctx).parcela1 = parcela();
 			setState(459);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -2736,7 +2858,8 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(454);
-				op3();
+				((FatorContext)_localctx).op3 = op3();
+				((FatorContext)_localctx).ops.add(((FatorContext)_localctx).op3);
 				setState(455);
 				parcela();
 				}
@@ -2982,9 +3105,72 @@ public class LAParser extends Parser {
 	}
 
 	public static class Parcela_unarioContext extends ParserRuleContext {
+		public Parcela_unarioContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_parcela_unario; }
+	 
+		public Parcela_unarioContext() { }
+		public void copyFrom(Parcela_unarioContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class Parcela_unario_exprContext extends Parcela_unarioContext {
+		public ExpressaoContext expressao() {
+			return getRuleContext(ExpressaoContext.class,0);
+		}
+		public Parcela_unario_exprContext(Parcela_unarioContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_unario_expr(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_unario_expr(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_unario_expr(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class Parcela_unario_realContext extends Parcela_unarioContext {
+		public TerminalNode NUM_REAL() { return getToken(LAParser.NUM_REAL, 0); }
+		public Parcela_unario_realContext(Parcela_unarioContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_unario_real(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_unario_real(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_unario_real(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class Parcela_unario_idContext extends Parcela_unarioContext {
 		public IdentificadorContext identificador() {
 			return getRuleContext(IdentificadorContext.class,0);
 		}
+		public Parcela_unario_idContext(Parcela_unarioContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_unario_id(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_unario_id(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_unario_id(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class Parcela_unario_chamadaContext extends Parcela_unarioContext {
 		public TerminalNode IDENT() { return getToken(LAParser.IDENT, 0); }
 		public List<ExpressaoContext> expressao() {
 			return getRuleContexts(ExpressaoContext.class);
@@ -2992,23 +3178,35 @@ public class LAParser extends Parser {
 		public ExpressaoContext expressao(int i) {
 			return getRuleContext(ExpressaoContext.class,i);
 		}
-		public TerminalNode NUM_INT() { return getToken(LAParser.NUM_INT, 0); }
-		public TerminalNode NUM_REAL() { return getToken(LAParser.NUM_REAL, 0); }
-		public Parcela_unarioContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_parcela_unario; }
+		public Parcela_unario_chamadaContext(Parcela_unarioContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_unario(this);
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_unario_chamada(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_unario(this);
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_unario_chamada(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_unario(this);
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_unario_chamada(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class Parcela_unario_inteiroContext extends Parcela_unarioContext {
+		public TerminalNode NUM_INT() { return getToken(LAParser.NUM_INT, 0); }
+		public Parcela_unario_inteiroContext(Parcela_unarioContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_unario_inteiro(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_unario_inteiro(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_unario_inteiro(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -3022,6 +3220,7 @@ public class LAParser extends Parser {
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,50,_ctx) ) {
 			case 1:
+				_localctx = new Parcela_unario_idContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(476);
@@ -3039,6 +3238,7 @@ public class LAParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new Parcela_unario_chamadaContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(479);
@@ -3068,6 +3268,7 @@ public class LAParser extends Parser {
 				}
 				break;
 			case 3:
+				_localctx = new Parcela_unario_inteiroContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(491);
@@ -3075,6 +3276,7 @@ public class LAParser extends Parser {
 				}
 				break;
 			case 4:
+				_localctx = new Parcela_unario_realContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(492);
@@ -3082,6 +3284,7 @@ public class LAParser extends Parser {
 				}
 				break;
 			case 5:
+				_localctx = new Parcela_unario_exprContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(493);
@@ -3106,25 +3309,49 @@ public class LAParser extends Parser {
 	}
 
 	public static class Parcela_nao_unarioContext extends ParserRuleContext {
-		public IdentificadorContext identificador() {
-			return getRuleContext(IdentificadorContext.class,0);
-		}
-		public TerminalNode CADEIA() { return getToken(LAParser.CADEIA, 0); }
 		public Parcela_nao_unarioContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parcela_nao_unario; }
+	 
+		public Parcela_nao_unarioContext() { }
+		public void copyFrom(Parcela_nao_unarioContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class Parcela_nao_unario_idContext extends Parcela_nao_unarioContext {
+		public IdentificadorContext identificador() {
+			return getRuleContext(IdentificadorContext.class,0);
+		}
+		public Parcela_nao_unario_idContext(Parcela_nao_unarioContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_nao_unario(this);
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_nao_unario_id(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_nao_unario(this);
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_nao_unario_id(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_nao_unario(this);
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_nao_unario_id(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class Parcela_nao_unario_cadeiaContext extends Parcela_nao_unarioContext {
+		public TerminalNode CADEIA() { return getToken(LAParser.CADEIA, 0); }
+		public Parcela_nao_unario_cadeiaContext(Parcela_nao_unarioContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).enterParcela_nao_unario_cadeia(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof LAListener ) ((LAListener)listener).exitParcela_nao_unario_cadeia(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LAVisitor ) return ((LAVisitor<? extends T>)visitor).visitParcela_nao_unario_cadeia(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -3137,6 +3364,7 @@ public class LAParser extends Parser {
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__50:
+				_localctx = new Parcela_nao_unario_idContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(499);
@@ -3146,6 +3374,7 @@ public class LAParser extends Parser {
 				}
 				break;
 			case CADEIA:
+				_localctx = new Parcela_nao_unario_cadeiaContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(501);
@@ -3168,6 +3397,11 @@ public class LAParser extends Parser {
 	}
 
 	public static class Exp_relacionalContext extends ParserRuleContext {
+		public Exp_aritimeticaContext exp_a1;
+		public Op_relacionalContext op_relacional;
+		public List<Op_relacionalContext> op_rs = new ArrayList<Op_relacionalContext>();
+		public Exp_aritimeticaContext exp_aritimetica;
+		public List<Exp_aritimeticaContext> outrosExp_a = new ArrayList<Exp_aritimeticaContext>();
 		public List<Exp_aritimeticaContext> exp_aritimetica() {
 			return getRuleContexts(Exp_aritimeticaContext.class);
 		}
@@ -3204,16 +3438,18 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(504);
-			exp_aritimetica();
+			((Exp_relacionalContext)_localctx).exp_a1 = exp_aritimetica();
 			setState(508);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__5) | (1L << T__51) | (1L << T__52) | (1L << T__53) | (1L << T__54) | (1L << T__55))) != 0)) {
 				{
 				setState(505);
-				op_relacional();
+				((Exp_relacionalContext)_localctx).op_relacional = op_relacional();
+				((Exp_relacionalContext)_localctx).op_rs.add(((Exp_relacionalContext)_localctx).op_relacional);
 				setState(506);
-				exp_aritimetica();
+				((Exp_relacionalContext)_localctx).exp_aritimetica = exp_aritimetica();
+				((Exp_relacionalContext)_localctx).outrosExp_a.add(((Exp_relacionalContext)_localctx).exp_aritimetica);
 				}
 			}
 
@@ -3281,6 +3517,11 @@ public class LAParser extends Parser {
 	}
 
 	public static class ExpressaoContext extends ParserRuleContext {
+		public Termo_logicoContext termo_l1;
+		public Op_logico_1Context op_logico_1;
+		public List<Op_logico_1Context> op_ls = new ArrayList<Op_logico_1Context>();
+		public Termo_logicoContext termo_logico;
+		public List<Termo_logicoContext> outrosTermos = new ArrayList<Termo_logicoContext>();
 		public List<Termo_logicoContext> termo_logico() {
 			return getRuleContexts(Termo_logicoContext.class);
 		}
@@ -3320,7 +3561,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(512);
-			termo_logico();
+			((ExpressaoContext)_localctx).termo_l1 = termo_logico();
 			setState(518);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -3328,9 +3569,11 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(513);
-				op_logico_1();
+				((ExpressaoContext)_localctx).op_logico_1 = op_logico_1();
+				((ExpressaoContext)_localctx).op_ls.add(((ExpressaoContext)_localctx).op_logico_1);
 				setState(514);
-				termo_logico();
+				((ExpressaoContext)_localctx).termo_logico = termo_logico();
+				((ExpressaoContext)_localctx).outrosTermos.add(((ExpressaoContext)_localctx).termo_logico);
 				}
 				}
 				setState(520);
@@ -3351,6 +3594,11 @@ public class LAParser extends Parser {
 	}
 
 	public static class Termo_logicoContext extends ParserRuleContext {
+		public Fator_logicoContext fator_l1;
+		public Op_logico_2Context op_logico_2;
+		public List<Op_logico_2Context> op_ls = new ArrayList<Op_logico_2Context>();
+		public Fator_logicoContext fator_logico;
+		public List<Fator_logicoContext> outrosFatores = new ArrayList<Fator_logicoContext>();
 		public List<Fator_logicoContext> fator_logico() {
 			return getRuleContexts(Fator_logicoContext.class);
 		}
@@ -3390,7 +3638,7 @@ public class LAParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(521);
-			fator_logico();
+			((Termo_logicoContext)_localctx).fator_l1 = fator_logico();
 			setState(527);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -3398,9 +3646,11 @@ public class LAParser extends Parser {
 				{
 				{
 				setState(522);
-				op_logico_2();
+				((Termo_logicoContext)_localctx).op_logico_2 = op_logico_2();
+				((Termo_logicoContext)_localctx).op_ls.add(((Termo_logicoContext)_localctx).op_logico_2);
 				setState(523);
-				fator_logico();
+				((Termo_logicoContext)_localctx).fator_logico = fator_logico();
+				((Termo_logicoContext)_localctx).outrosFatores.add(((Termo_logicoContext)_localctx).fator_logico);
 				}
 				}
 				setState(529);
@@ -3634,7 +3884,7 @@ public class LAParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3F\u0222\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3G\u0222\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+

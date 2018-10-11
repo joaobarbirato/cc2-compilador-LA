@@ -22,6 +22,13 @@ public class TabelaDeSimbolos {
         this.escopo = escopo;
     }
 
+    public void printEntradas () {
+        for(EntradaTabelaDeSimbolos e : simbolos) {
+            System.out.println ( e.getNome ( ) );
+            System.out.println ( e.getTipo ( ) );
+        }
+    }
+
     /* Adiciona um símbolo na tabela */
     public void adicionarSimbolo(String nome, String tipo) {
         simbolos.add(new EntradaTabelaDeSimbolos(nome,tipo));
@@ -34,6 +41,17 @@ public class TabelaDeSimbolos {
         }
     }
 
+    public List<EntradaTabelaDeSimbolos> getSimbolos(){
+        return simbolos;
+    }
+
+    public boolean existeStructId(String id){
+        for ( EntradaTabelaDeSimbolos etds : simbolos )
+            if ( etds.getNome ().equals ( id ) && etds.getTipo ().equals ( "struct" ) )
+                return true;
+        return false;
+    }
+
     /* Checa se um determinado símbolo existe na tabela */
     public boolean existeSimbolo(String nome) {
         for(EntradaTabelaDeSimbolos etds:simbolos) {
@@ -42,6 +60,23 @@ public class TabelaDeSimbolos {
             }
         }
         return false;
+    }
+
+    public String getTipo(String nome) {
+        for(EntradaTabelaDeSimbolos etds:simbolos){
+            if (etds.getNome().equals(nome)) {
+                return etds.getTipo();
+            }
+        }
+        return "false";
+    }
+
+    public EntradaTabelaDeSimbolos getEntrada(String nome){
+        for(EntradaTabelaDeSimbolos ets:simbolos){
+            if( ets.getNome ( ).equals ( nome ) )
+                return ets;
+        }
+        return null;
     }
 
     /* Função que passa para strings os atributos desejados */

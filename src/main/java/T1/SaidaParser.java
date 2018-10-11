@@ -20,6 +20,11 @@ public class SaidaParser {
         conteudo.append("\n");
     }
 
+    public void print(String texto) {
+        if(!modificado) modificado = true;
+        conteudo.append(texto);
+    }
+
     public boolean isModificado() {
         return modificado;
     }
@@ -27,5 +32,10 @@ public class SaidaParser {
     @Override
     public String toString() {
         return conteudo.toString();
+    }
+
+    public void reset() {
+        conteudo.setLength(0);
+        modificado = false;
     }
 }
