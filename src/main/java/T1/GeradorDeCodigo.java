@@ -111,7 +111,7 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         codigoC.append (
                 // início dos programas em C segundo os casos de teste
                 "#include<stdio.h>\n" +
-                "#include<stdlib.h>\n\n"
+                        "#include<stdlib.h>\n\n"
         );
         // visitChildren(ctx): chamada de visits de regras derivadas.
         visitDeclaracoes ( ctx.declaracoes () );
@@ -788,14 +788,14 @@ public class GeradorDeCodigo extends LABaseVisitor<String> {
         String id = visitIdentificador ( ctx.identificador () );
         String expr = visitExpressao ( ctx.expressao () );
         if( pilhaDeEscopos.escopoAtual ().existeSimbolo ( id ) &&
-            pilhaDeEscopos.escopoAtual ().getEntrada ( id ).getTipo ().contains ( "*" ) &&
-            !expr.contains ( "&" )
+                pilhaDeEscopos.escopoAtual ().getEntrada ( id ).getTipo ().contains ( "*" ) &&
+                !expr.contains ( "&" )
         )
             buffer += "*";
 
         buffer += id + " = " + expr + END_CMD_LINE;
         if ( pilhaDeEscopos.escopoAtual ().existeSimbolo ( id ) &&
-             pilhaDeEscopos.escopoAtual ( ).getEntrada ( id ).getTipo ( ).equals ( "char*" )
+                pilhaDeEscopos.escopoAtual ( ).getEntrada ( id ).getTipo ( ).equals ( "char*" )
         )
             buffer = "strcpy(" + buffer.replace(" = ", ", ")
                     .replace(END_CMD_LINE, ")" + END_CMD_LINE).replace("*", "");
